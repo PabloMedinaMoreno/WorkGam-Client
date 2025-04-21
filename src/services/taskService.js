@@ -1,0 +1,172 @@
+import axiosInstance from "./axios";
+
+/**
+ * Fetches the tasks for a procedure.
+ * 
+ * Sends a GET request to the `/procedures/{procedureId}/tasks` endpoint to retrieve 
+ * the list of tasks associated with a given procedure. This is typically used 
+ * for both admin and client views.
+ * 
+ * @async
+ * @function
+ * @param {number|string} procedureId - The ID of the procedure to fetch tasks for.
+ * @returns {Promise<Array>} A promise that resolves to an array of tasks.
+ */
+export const fetchTasks = async (procedureId) => {
+  const response = await axiosInstance.get(`/procedures/${procedureId}/tasks`);
+  return response.data.tasks;
+};
+
+/**
+ * Adds a new task to a procedure.
+ * 
+ * Sends a POST request to the `/procedures/{procedureId}/tasks` endpoint to create a new task 
+ * for the given procedure.
+ * 
+ * @async
+ * @function
+ * @param {Object} taskData - The data for the new task.
+ * @param {number|string} procedureId - The ID of the procedure to associate the task with.
+ * @returns {Promise<Object>} A promise that resolves to the newly created task.
+ */
+export const addTask = async (taskData, procedureId) => {
+  const response = await axiosInstance.post(
+    `/procedures/${procedureId}/tasks`,
+    taskData
+  );
+  return response.data;
+};
+
+/**
+ * Updates an existing task.
+ * 
+ * Sends a PUT request to the `/tasks/{taskId}` endpoint to update an existing task with new data.
+ * 
+ * @async
+ * @function
+ * @param {number|string} taskId - The ID of the task to update.
+ * @param {Object} taskData - The updated data for the task.
+ * @returns {Promise<Object>} A promise that resolves to the updated task.
+ */
+export const updateTask = async (taskId, taskData) => {
+  console.log("taskData", taskData);
+  const response = await axiosInstance.put(`/tasks/${taskId}`, taskData);
+  return response.data;
+};
+
+/**
+ * Deletes a task.
+ * 
+ * Sends a DELETE request to the `/tasks/{taskId}` endpoint to remove the specified task.
+ * 
+ * @async
+ * @function
+ * @param {number|string} taskId - The ID of the task to delete.
+ * @returns {Promise<void>} A promise that resolves when the task is deleted.
+ */
+export const deleteTask = async (taskId) => {
+  await axiosInstance.delete(`/tasks/${taskId}`);
+};
+
+/**
+ * Uploads a document for a task.
+ * 
+ * Sends a POST request to the `/tasks/{startedProcedureId}/{taskId}/upload` endpoint with the 
+ * provided PDF file as form data for the given task.
+ * 
+ * @async
+ * @function
+ * @param {number|string} startedProcedureId - The ID of the started procedure.
+ * @param {number|string} taskId - The ID of the task to upload the document for.
+ * @param {File} file - The PDF file to upload.
+ * @returns {Promise<Object>} A promise that resolves with the server's response after uploading the document.
+ */
+export const uploadTaskDocument = async (startedProcedureId, taskId, file, socketId) => {
+  const formData = new FormData();
+  formData.append("document", file);
+  const response = await axiosInstance.post(
+    `/tasks/${startedProcedureId}/${taskId}/upload`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return response.data;
+};
+
+/**
+ * Fetches all tasks that have been started for a procedure.
+ * 
+ * Sends a GET request to the `/procedures/started/{startedProcedureId}/tasks` endpoint to retrieve 
+ * all tasks that have been started for the given procedure.
+ * 
+ * @async
+ * @function
+ * @param {number|string} startedProcedureId - The ID of the started procedure to fetch tasks for.
+ * @returns {Promise<Array>} A promise that resolves to an array of started tasks.
+ */
+export const fetchAllStartedTasks = async (startedProcedureId) => {
+  const response = await axiosInstance.get(
+    `/procedures/started/${startedProcedureId}/tasks`
+  );
+  return response.data;
+};
+
+/**
+ * Fetches all completed tasks for an employee.
+ * 
+ * Sends a GET request to the `/tasks/completed` endpoint to retrieve all tasks that have been completed by the employee.
+ * 
+ * @async
+ * @function
+ * @returns {Promise<Array>} A promise that resolves to an array of completed tasks.
+ */
+export const fetchMyCompletedTasks = async () => {
+  const response = await axiosInstance.get("/tasks/completed");
+  return response.data;
+};
+
+/**
+ * Fetches all pending tasks for an employee.
+ * 
+ * Sends a GET request to the `/tasks/pending` endpoint to retrieve all tasks that are still pending for the employee.
+ * 
+ * @async
+ * @function
+ * @returns {Promise<Array>} A promise that resolves to an array of pending tasks.
+ */
+export const fetchMyPendingTasks = async () => {
+  const response = await axiosInstance.get("/tasks/pending");
+  return response.data;
+};
+
+/**
+ * Accepts a task by an employee.
+ * 
+ * Sends a PUT request to the `/tasks/accept/{taskId}` endpoint to mark the task as accepted by the employee.
+ * The `socketId` is sent for real-time notifications to the employee.
+ * 
+ * @async
+ * @function
+ * @param {number|string} taskId - The ID of the task to accept.
+ * @param {string} socketId - The socket ID for real-time notifications.
+ * @returns {Promise<void>} A promise that resolves when the task is accepted.
+ */
+export const acceptTask = async (taskId, socketId) => {
+  await axiosInstance.put(`/tasks/accept/${taskId}`, { socketId });
+};
+
+/**
+ * Rejects a task by an employee with a reason.
+ * 
+ * Sends a PUT request to the `/tasks/reject/{taskId}` endpoint to mark the task as rejected by the employee,
+ * along with the reason for rejection. The `socketId` is sent for real-time notifications to the employee.
+ * 
+ * @async
+ * @function
+ * @param {number|string} taskId - The ID of the task to reject.
+ * @param {string} reason - The reason for rejecting the task.
+ * @param {string} socketId - The socket ID for real-time notifications.
+ * @returns {Promise<void>} A promise that resolves when the task is rejected.
+ */
+export const rejectTask = async (taskId, reason, socketId) => {
+  await axiosInstance.put(`/tasks/reject/${taskId}`, { reason, socketId });
+};
