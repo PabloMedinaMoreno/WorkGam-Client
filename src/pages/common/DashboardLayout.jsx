@@ -1,12 +1,36 @@
-// src/pages/DashboardLayout.jsx
-import React, { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import Sidebar from "../../components/common/Sidebar";
-import Footer from "../../components/common/Footer";
-import LevelUpAnimation from "../../components/gamification/LevelUpAnimation";
-import LevelProgressAnimation from "../../components/gamification/LevelProgressAnimation";
-import { useNotifications } from "../../context/NotificationsContext";
+// src/pages/common/DashboardLayout.jsx
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
+import useTaskStore from '../../store/useTaskStore';
+import useRoleStore from '../../store/useRoleStore';
+import ProtectedRoute from '../../routes';
+
+import Sidebar from '../../components/common/Sidebar';
+import DashboardHome from './DashboardHome';
+import ProfilePage from './ProfilePage';
+import NotificationsPage from './NotificationsPage';
+
+// Admin pages
+import ProceduresListPage from '../admin/ProceduresListPage';
+import AdminProcedureTasksPage from '../admin/AdminProcedureTasksPage';
+import RolesListPage from '../admin/RolesListPage';
+import WorkerListPage from '../admin/WorkerListPage';
+import AdminGamificationDashboardPage from '../admin/AdminGamificationDashboardPage';
+import AdminProcedureHistoryPage from '../admin/AdminProcedureHistoryPage';
+import AdminProcedureTasksHistoryPage from '../admin/AdminProcedureTasksHistoryPage';
+
+// Client pages
+import AvailableProceduresPage from '../client/AvaliableProceduresPage';
+import MyProceduresPage from '../client/MyProceduresPage';
+import ClientProcedureTasksPage from '../client/ClientProcedureTasksPage';
+
+// Employee pages
+import PendingTasksPage from '../employee/PendingTasksPage';
+import CompletedTasksPage from '../employee/CompletedTasksPage';
+import EmployeeGamificationDashboardPage from '../employee/EmployeeGamificationDashboardPage';
+
 import {
   FaUser,
   FaChartBar,
@@ -18,25 +42,28 @@ import {
   FaCheckCircle,
   FaHistory,
 } from "react-icons/fa";
+
 import NotificationIcon from "../../components/common/NotificationIcon";
-import { AnimatePresence } from "framer-motion";
-import DashboardHome from "./DashboardHome";
 import PendingTasksIcon from "../../components/common/PendingTasksIcon";
-import useTaskStore from "../../store/useTaskStore";
 
-const DashboardLayout = ({ sidebarOpen }) => {
+export default function DashboardLayout({ sidebarOpen }) {
   const { user } = useAuth();
-  const { newLevel, clearLevelUp, newProgress, clearProgressNotification } =
-    useNotifications();
-  const location = useLocation();
+  const { employeeRoles } = useRoleStore();
 
-  // Carga global de tareas pendientes para empleados
+  // Carga inicial de tareas para empleados
   useEffect(() => {
-    if (user && (user.role !== "Administrador" && user.role !== "Cliente")) {
-      // Llama a la función para cargar tareas pendientes
+    if (user?.role === 'Empleado') {
       useTaskStore.getState().loadMyPendingTasks();
     }
-  }, []);
+  }, [user]);
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Roles comunes para todos los usuarios
+  const commonRoles = [...employeeRoles, 'Cliente', 'Administrador'];
+
 
   const menuOptions = {
     Administrador: [
@@ -109,31 +136,156 @@ const DashboardLayout = ({ sidebarOpen }) => {
 
   const options = menuOptions[user.role] || employeeOptions;
 
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <div className="flex flex-1 mt-[64px]">
-        <AnimatePresence>
-          {sidebarOpen && <Sidebar options={options} />}
-        </AnimatePresence>
-        {/* Área de contenido principal */}
-        <main className="flex-1 p-4 overflow-auto">
-          {newLevel ? (
-            <LevelUpAnimation level={newLevel} onClose={clearLevelUp} />
-          ) : newProgress ? (
-            <LevelProgressAnimation
-              progress={newProgress}
-              onClose={clearProgressNotification}
-            />
-          ) : location.pathname === "/dashboard" ? (
-            <DashboardHome options={options} />
-          ) : (
-            <Outlet />
-          )}
-        </main>
+    <div className="flex">
+      <AnimatePresence>
+        {sidebarOpen && <Sidebar options={options} />}
+      </AnimatePresence>
+      <div className="flex-1 p-4 overflow-auto">
+        <Routes>
+          {/* Dashboard home (todos los roles) */}
+          <Route
+            index
+            element={
+              <ProtectedRoute allowedRoles={commonRoles}>
+                <DashboardHome options={options} />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Perfil y notificaciones (todos los roles) */}
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute allowedRoles={commonRoles}>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="notifications"
+            element={
+              <ProtectedRoute allowedRoles={commonRoles}>
+                <NotificationsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin only */}
+          <Route
+            path="admin/procedures"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <ProceduresListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/procedures/:id/tasks"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <AdminProcedureTasksPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/roles"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <RolesListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/workers"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <WorkerListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/gamification"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <AdminGamificationDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/procedure-history"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <AdminProcedureHistoryPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/procedure-history/:id/tasks"
+            element={
+              <ProtectedRoute allowedRoles={['Administrador']}>
+                <AdminProcedureTasksHistoryPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Cliente only */}
+          <Route
+            path="client/procedures"
+            element={
+              <ProtectedRoute allowedRoles={['Cliente']}>
+                <AvailableProceduresPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="client/myprocedures"
+            element={
+              <ProtectedRoute allowedRoles={['Cliente']}>
+                <MyProceduresPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="client/procedures/:id/tasks"
+            element={
+              <ProtectedRoute allowedRoles={['Cliente']}>
+                <ClientProcedureTasksPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Empleado only */}
+          <Route
+            path="employee/tasks"
+            element={
+              <ProtectedRoute allowedRoles={employeeRoles}>
+                <PendingTasksPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="employee/completed"
+            element={
+              <ProtectedRoute allowedRoles={employeeRoles}>
+                <CompletedTasksPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="employee/gamification"
+            element={
+              <ProtectedRoute allowedRoles={employeeRoles}>
+                <EmployeeGamificationDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Cualquier otra ruta redirige al dashboard */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </div>
-      <Footer />
     </div>
   );
-};
-
-export default DashboardLayout;
+}

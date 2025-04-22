@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import {
-  fetchRoles,
-  addRole,
-  updateRole,
-  deleteRoleRequest,
+  fetchRolesService,
+  createRoleService,
+  updateRoleService,
+  deleteRoleService,
 } from "../services/roleService.js";
 
 /**
@@ -17,7 +17,7 @@ import {
  * @property {Array} employeeRoles - The list of role names assigned to employees.
  * @property {boolean} loading - A boolean indicating if data is currently being loaded.
  * @property {Function} loadRoles - Loads all roles from the API and updates the store.
- * @property {Function} addOrUpdateRole - Adds a new role or updates an existing one.
+ * @property {Function} addOrupdateRoleService - Adds a new role or updates an existing one.
  * @property {Function} deleteRole - Deletes a role by its ID.
  */
 
@@ -48,12 +48,10 @@ const useRoleStore = create((set, get) => ({
   loadRoles: async () => {
     set({ loading: true });
     try {
-      const roles = await fetchRoles();
+      const roles = await fetchRolesService();
       set({ roles, employeeRoles: roles.map((role) => role.name) });
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al cargar los roles";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -72,18 +70,16 @@ const useRoleStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the role has been added or updated.
    * @throws {Error} If there is an error adding or updating the role.
    */
-  addOrUpdateRole: async (roleData, selectedRole) => {
+  addOrupdateRoleService: async (roleData, selectedRole) => {
     try {
       if (selectedRole) {
-        await updateRole(selectedRole.id, roleData);
+        await updateRoleService(selectedRole.id, roleData);
       } else {
-        await addRole(roleData);
+        await createRoleService(roleData);
       }
       await get().loadRoles();
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al guardar el rol";
-      throw new Error(message);
+      throw error;
     }
   },
 
@@ -100,12 +96,10 @@ const useRoleStore = create((set, get) => ({
    */
   deleteRole: async (roleId) => {
     try {
-      await deleteRoleRequest(roleId);
+      await deleteRoleService(roleId);
       await get().loadRoles();
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al eliminar el rol";
-      throw new Error(message);
+      throw error;
     }
   },
 }));

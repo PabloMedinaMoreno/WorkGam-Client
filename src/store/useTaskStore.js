@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import {
-  fetchTasks,
-  addTask,
-  updateTask,
-  deleteTask,
-  uploadTaskDocument,
-  fetchAllStartedTasks,
-  fetchMyCompletedTasks,
-  fetchMyPendingTasks,
-  acceptTask,
-  rejectTask,
+  fetchTasksService,
+  createTaskService,
+  updateTaskService,
+  deleteTaskService,
+  uploadTaskDocumentService,
+  fetchAllStartedTasksService,
+  fetchMyCompletedTasksService,
+  fetchMyPendingTasksService,
+  acceptTaskService,
+  rejectTaskService,
 } from "../services/taskService";
 
 /**
@@ -28,15 +28,15 @@ import {
  * @property {boolean} loading - A boolean indicating if tasks are being loaded.
  * @property {Object} pendingUploads - A mapping of tasks that have selected files pending to be uploaded.
  * @property {Function} loadTasks - Loads tasks for a specific procedure.
- * @property {Function} addOrUpdateTask - Adds a new task or updates an existing task.
- * @property {Function} deleteTask - Deletes a task.
+ * @property {Function} addOrupdateTaskService - Adds a new task or updates an existing task.
+ * @property {Function} deleteTaskService - Deletes a task.
  * @property {Function} handleFileSelect - Handles the file selection for a task.
  * @property {Function} handleConfirmUploads - Confirms the file uploads for tasks.
  * @property {Function} loadAllStartedTasks - Loads all tasks that have been started for a specific procedure.
  * @property {Function} loadMyCompletedTasks - Loads the completed tasks for the current user.
  * @property {Function} loadMyPendingTasks - Loads the pending tasks for the current user.
- * @property {Function} acceptTask - Accepts a task by its ID.
- * @property {Function} rejectTask - Rejects a task by its ID with a reason.
+ * @property {Function} acceptTaskService - Accepts a task by its ID.
+ * @property {Function} rejectTaskService - Rejects a task by its ID with a reason.
  */
 
 /**
@@ -71,10 +71,10 @@ const useTaskStore = create((set, get) => ({
   loadTasks: async (procedureId) => {
     set({ loading: true });
     try {
-      const tasks = await fetchTasks(procedureId);
+      const tasks = await fetchTasksService(procedureId);
       set({ tasks });
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error fetching tasks");
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -94,10 +94,10 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is added or updated.
    * @throws {Error} If there is an error saving the task.
    */
-  addOrUpdateTask: async (selectedTask, taskData, procedureId) => {
+  addOrupdateTaskService: async (selectedTask, taskData, procedureId) => {
     try {
       if (selectedTask) {
-        const updatedTaskData = await updateTask(
+        const updatedTaskData = await updateTaskService(
           selectedTask.id,
           taskData,
           procedureId
@@ -108,11 +108,11 @@ const useTaskStore = create((set, get) => ({
           ),
         }));
       } else {
-        const newTask = await addTask(taskData, procedureId);
+        const newTask = await createTaskService(taskData, procedureId);
         set((state) => ({ tasks: [...state.tasks, newTask] }));
       }
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error saving task");
+      throw error;
     }
   },
 
@@ -128,14 +128,14 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is deleted.
    * @throws {Error} If there is an error deleting the task.
    */
-  deleteTask: async (taskId) => {
+  deleteTaskService: async (taskId) => {
     try {
-      await deleteTask(taskId);
+      await deleteTaskService(taskId);
       set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== taskId),
       }));
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error deleting task");
+      throw error;
     }
   },
 
@@ -198,7 +198,7 @@ const useTaskStore = create((set, get) => ({
     let errorOccurred = false;
     for (const [taskId, file] of entries) {
       try {
-        await uploadTaskDocument(startedProcedureId, taskId, file);
+        await uploadTaskDocumentService(startedProcedureId, taskId, file);
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || "Error uploading file";
@@ -226,10 +226,10 @@ const useTaskStore = create((set, get) => ({
   loadAllStartedTasks: async (startedProcedureId) => {
     set({ loading: true });
     try {
-      const allStartedTasks = await fetchAllStartedTasks(startedProcedureId);
+      const allStartedTasks = await fetchAllStartedTasksService(startedProcedureId);
       set({ allStartedTasks });
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error fetching tasks");
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -248,10 +248,10 @@ const useTaskStore = create((set, get) => ({
   loadMyCompletedTasks: async () => {
     set({ loading: true });
     try {
-      const completedTasks = await fetchMyCompletedTasks();
+      const completedTasks = await fetchMyCompletedTasksService();
       set({ completedTasks });
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error fetching tasks");
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -270,10 +270,10 @@ const useTaskStore = create((set, get) => ({
   loadMyPendingTasks: async () => {
     set({ loading: true });
     try {
-      const pendingTasks = await fetchMyPendingTasks();
+      const pendingTasks = await fetchMyPendingTasksService();
       set({ pendingTasks });
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error fetching tasks");
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -292,16 +292,16 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is accepted.
    * @throws {Error} If there is an error accepting the task.
    */
-  acceptTask: async (taskId, socketId) => {
+  acceptTaskService: async (taskId, socketId) => {
     try {
-      await acceptTask(taskId, socketId);
+      await acceptTaskService(taskId, socketId);
       set((state) => ({
         pendingTasks: state.pendingTasks.filter(
           (task) => task.started_task_id !== taskId
         ),
       }));
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error accepting task");
+      throw error;
     }
   },
 
@@ -319,16 +319,16 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is rejected.
    * @throws {Error} If there is an error rejecting the task.
    */
-  rejectTask: async (taskId, reason, socketId) => {
+  rejectTaskService: async (taskId, reason, socketId) => {
     try {
-      await rejectTask(taskId, reason, socketId);
+      await rejectTaskService(taskId, reason, socketId);
       set((state) => ({
         pendingTasks: state.pendingTasks.filter(
           (task) => task.started_task_id !== taskId
         ),
       }));
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error rejecting task");
+      throw error;
     }
   },
 }));

@@ -26,13 +26,13 @@ const ProfileCard = ({
   };
 
   return (
-    <div className="w-full max-w-lg bg-white shadow-2xl rounded-3xl p-6">
+    <div className="w-full max-w-lg shadow-2xl rounded-3xl p-6 bg-white ">
       {/* Imagen de Perfil con cursor pointer para indicar interactividad */}
       <div className="flex justify-center relative">
         <Tooltip title="Cambiar imagen de perfil" arrow>
          {/* Tooltip para mostrar mensaje al pasar el mouse sobre la imagen */}
          <img
-          src={user.profile_pic || "https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg"}
+          src={user.profile_pic || "images/default-profile.png"}
           alt="Profile"
           className="w-40 h-40 rounded-full border-4 border-gray-300 shadow-lg object-cover cursor-pointer"
           onClick={handleImageClick}

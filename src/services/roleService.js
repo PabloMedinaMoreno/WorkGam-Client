@@ -9,9 +9,15 @@ import axiosInstance from "./axios.js";
  * @function
  * @returns {Promise<Object[]>} A promise that resolves to an array of roles. Each role object contains details such as the role name, description, and ID.
  */
-export const fetchRoles = async () => {
-  const response = await axiosInstance.get("/roles");
-  return response.data;
+export const fetchRolesService = async () => {
+  try {
+    const response = await axiosInstance.get("/roles");
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al obtener los roles"
+    );
+  }
 };
 
 /**
@@ -26,9 +32,13 @@ export const fetchRoles = async () => {
  * @param {string} roleData.description - A description of the role.
  * @returns {Promise<Object>} A promise that resolves to the created role object, including its ID and details.
  */
-export const addRole = async (roleData) => {
-  const response = await axiosInstance.post("/roles", roleData);
-  return response.data;
+export const createRoleService = async (roleData) => {
+  try {
+    const response = await axiosInstance.post("/roles", roleData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al crear el rol");
+  }
 };
 
 /**
@@ -44,9 +54,15 @@ export const addRole = async (roleData) => {
  * @param {string} roleData.description - The updated description of the role.
  * @returns {Promise<Object>} A promise that resolves to the updated role object.
  */
-export const updateRole = async (roleId, roleData) => {
-  const response = await axiosInstance.put(`/roles/${roleId}`, roleData);
-  return response.data;
+export const updateRoleService = async (roleId, roleData) => {
+  try {
+    const response = await axiosInstance.put(`/roles/${roleId}`, roleData);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al actualizar el rol"
+    );
+  }
 };
 
 /**
@@ -59,7 +75,13 @@ export const updateRole = async (roleId, roleData) => {
  * @param {number|string} roleId - The ID of the role to delete.
  * @returns {Promise<Object>} A promise that resolves to the response data from the API, usually confirming the deletion.
  */
-export const deleteRoleRequest = async (roleId) => {
-  const response = await axiosInstance.delete(`/roles/${roleId}`);
-  return response.data;
+export const deleteRoleService = async (roleId) => {
+  try {
+    const response = await axiosInstance.delete(`/roles/${roleId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al eliminar el rol"
+    );
+  }
 };

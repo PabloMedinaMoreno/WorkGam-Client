@@ -1,4 +1,3 @@
-// src/components/tasks/TaskTable.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import ActionButtons from "../common/ActionButtons";
@@ -13,7 +12,7 @@ const TaskTable = ({ tasks, onEdit, onDelete }) => {
             <th className="py-2 px-4">Descripción</th>
             <th className="py-2 px-4">XP</th>
             <th className="py-2 px-4">Dificultad</th>
-            <th className="py-2 px-4">Duración (días)</th>
+            <th className="py-2 px-4">Duración</th>
             <th className="py-2 px-4 text-right">Acciones</th>
           </tr>
         </thead>
@@ -37,7 +36,7 @@ const TaskTable = ({ tasks, onEdit, onDelete }) => {
                 <td className="py-2 px-4">{task.description}</td>
                 <td className="py-2 px-4">{task.xp}</td>
                 <td className="py-2 px-4">{task.difficulty}</td>
-                <td className="py-2 px-4">{task.estimated_duration_days}</td>
+                <td className="py-2 px-4">{task.estimated_duration_days} días</td>
                 <td className="py-2 px-4 text-right">
                   <ActionButtons
                     onEdit={() => onEdit(task)}

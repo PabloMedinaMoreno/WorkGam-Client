@@ -5,14 +5,23 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { registerSchema } from "../../schemas/authSchema.js"; 
 import Card from "../../components/common/Card";
-import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 import Label from "../../components/common/Label";
+import IconButton from "../../components/common/IconButton";  // Importando IconButton
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Íconos de mostrar/ocultar contraseña
+import { FaUserPlus } from "react-icons/fa"; // Ícono de "registrarse"
 import { useAuth } from "../../context/AuthContext";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Register() {
+
+/**
+ * Página de registro de usuario.
+ * Permite a los usuarios crear una nueva cuenta proporcionando sus datos.
+ *
+ * @returns {JSX.Element} La página de registro.
+ */
+function RegisterPage() {
   const { signup, isAuthenticated } = useAuth();
+  
   // Usa Zod para la validación del formulario de registro
   const {
     register,
@@ -26,36 +35,40 @@ function Register() {
   // State to show/hide password
   const [showPassword, setShowPassword] = useState(false);
 
+  /**
+   * Manejador de envío del formulario de registro.
+   * Registra al usuario con los datos proporcionados.
+   *
+   * @param {object} data Los datos del formulario.
+   */
   const onSubmit = async (data) => {
     try {
       await signup(data);
       toast.success("Registro exitoso. Por favor, verifica tu correo electrónico para activar tu cuenta.");
     } catch (error) {
-      console.error("Error registering", error);
-      if (Array.isArray(error.message)) {
-        error.message.forEach((message) => toast.error(message));
-      } else {
-        toast.error(error.message);
-      }
+      toast.error(error.message);
     }
   };
 
+  // Redirige al dashboard si el usuario está autenticado
   useEffect(() => {
     if (isAuthenticated) navigate("/dashboard");
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md p-8 shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Crear cuenta</h1>
+        <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
+          Crear cuenta
+        </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Username */}
+          {/* Nombre de usuario */}
           <div>
             <Label htmlFor="username">Nombre de usuario</Label>
             <Input
               id="username"
               type="text"
-              placeholder="Write your name"
+              placeholder="Escribe tu nombre"
               {...register("username")}
               autoFocus
               className="mt-1"
@@ -67,13 +80,13 @@ function Register() {
             )}
           </div>
 
-          {/* Email */}
+          {/* Correo electrónico */}
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Correo Electrónico</Label>
             <Input
               id="email"
               type="email"
-              placeholder="youremail@domain.tld"
+              placeholder="tuemail@dominio.com"
               {...register("email")}
               className="mt-1"
             />
@@ -84,7 +97,7 @@ function Register() {
             )}
           </div>
 
-          {/* Phone (optional) */}
+          {/* Teléfono (opcional) */}
           <div>
             <Label htmlFor="phone">Teléfono (Opcional)</Label>
             <Input
@@ -101,7 +114,7 @@ function Register() {
             )}
           </div>
 
-          {/* Gender: Radio Buttons */}
+          {/* Género: Botones de opción */}
           <div>
             <span className="block text-gray-700 font-medium mb-1">Género</span>
             <div className="flex items-center gap-4">
@@ -131,7 +144,7 @@ function Register() {
             )}
           </div>
 
-          {/* Password */}
+          {/* Contraseña */}
           <div>
             <Label htmlFor="password">Contraseña</Label>
             <div className="relative">
@@ -157,7 +170,7 @@ function Register() {
             )}
           </div>
 
-          {/* Confirm Password */}
+          {/* Confirmar contraseña */}
           <div>
             <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
             <div className="relative">
@@ -183,9 +196,15 @@ function Register() {
             )}
           </div>
 
-          <Button className="w-full bg-indigo-700 hover:bg-indigo-600 text-white ">
+          {/* Botón de registro con IconButton */}
+          <IconButton
+            variant="primary"
+            className="w-full bg-indigo-700 hover:bg-indigo-600 text-white flex items-center justify-center"
+            type="submit"
+          >
+            <FaUserPlus/>
             Registrarse
-          </Button>
+          </IconButton>
         </form>
         <p className="text-center mt-4">
           ¿Ya tienes cuenta?{" "}
@@ -198,4 +217,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterPage;

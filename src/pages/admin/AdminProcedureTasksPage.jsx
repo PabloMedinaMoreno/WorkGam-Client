@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import useTaskStore from "../../store/useTaskStore";
 import { motion } from "framer-motion";
 import IconButton from "../../components/common/IconButton";
+import { CircularProgress } from "@mui/material";
 
 const AdminProcedureTasksPage = () => {
   const location = useLocation();
@@ -68,7 +69,7 @@ const AdminProcedureTasksPage = () => {
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-2 text-center"
+        className="text-3xl font-semibold text-center mb-4 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -77,7 +78,7 @@ const AdminProcedureTasksPage = () => {
       </motion.h1>
 
       <motion.p
-        className="text-gray-600 mb-6 text-center"
+        className="text-gray-600 mb-8 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}
@@ -101,7 +102,7 @@ const AdminProcedureTasksPage = () => {
       </motion.div>
 
       {loading ? (
-        <LoadingSpinner />
+        <CircularProgress />
       ) : (
         <TaskTable
           tasks={tasks}

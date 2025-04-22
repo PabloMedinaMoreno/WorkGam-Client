@@ -2,11 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { io } from "socket.io-client";
 import {
-  signupRequest,
-  loginRequest,
-  getProfile,
-  updateProfileRequest,
-  updateProfilePicRequest,
+  signupService,
+  loginService,
+  profileService,
+  updateProfileService,
+  updateProfilePicService,
 } from "../services/authService.js";
 
 /**
@@ -71,11 +71,11 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
-      const user = await signupRequest(userData);
+      const user = await signupService(userData);
       setUser(user);
       setIsAuthenticated(true);
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Error en el registro");
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -83,13 +83,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const user = await loginRequest(userData);
+      const user = await loginService(userData);
       setUser(user);
       setIsAuthenticated(true);
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error en el inicio de sesión"
-      );
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -105,12 +103,10 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (profileData) => {
     try {
-      const user = await updateProfileRequest(profileData);
+      const user = await updateProfileService(profileData);
       setUser(user);
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error al actualizar el perfil"
-      );
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -118,12 +114,10 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfilePic = async (file) => {
     try {
-      const user = await updateProfilePicRequest(file);
+      const user = await updateProfilePicService(file);
       setUser(user);
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error al actualizar la foto de perfil"
-      );
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -131,6 +125,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
+      setLoading(true);
       const token = Cookies.get("token");
       if (!token) {
         setIsAuthenticated(false);
@@ -138,16 +133,14 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const user = await getProfile();
+        const user = await profileService();
         setUser(user);
         setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
         Cookies.remove("token");
-        throw new Error(
-          error.response?.data?.message || "Error al verificar la autenticación"
-        );
+        throw error;
       } finally {
         setLoading(false);
       }

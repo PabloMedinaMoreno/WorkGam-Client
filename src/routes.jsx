@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import { CircularProgress } from "@mui/material";
 
 const ProtectedRoute = ({ allowedRoles, children }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -14,9 +15,11 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
     return <Navigate to="/login" />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    console.log("Unauthorized access attempt:", user.role);
-    console.log("Allowed roles:", allowedRoles);
+  if (
+    children.props.path &&
+    allowedRoles &&
+    !allowedRoles.includes(user.role)
+  ) {
     return <Navigate to="/unauthorized" />;
   }
 

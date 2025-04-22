@@ -1,13 +1,12 @@
-// src/pages/admin/WorkerListPage.jsx
 import React, { useEffect, useState } from "react";
 import WorkerTable from "../../components/workers/WorkerTable";
 import WorkerModal from "../../components/workers/WorkerModal";
-import LoadingSpinner from "../../components/common/LoadingSpinner.jsx";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FaPlus } from "react-icons/fa";
 import IconButton from "../../components/common/IconButton.jsx";
 import useWorkerStore from "../../store/useWorkerStore.js";
+import { CircularProgress } from "@mui/material";
 
 const WorkerListPage = () => {
   const { workers, loading, addOrUpdateWorker, deleteWorker, loadWorkers } =
@@ -62,10 +61,18 @@ const WorkerListPage = () => {
     }
   };
 
+  // if (loading) {
+  //   return (
+  //     <div className="w-full h-screen flex justify-center items-center">
+  //       <CircularProgress size={60} color="primary" />
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}

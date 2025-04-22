@@ -30,7 +30,7 @@ const DashboardHome = ({ options }) => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-3xl font-bold text-gray-700"
+        className="text-3xl font-bold text-center text-indigo-800"
       >
         ¡Bienvenido, {user.username}!
       </motion.h2>
@@ -38,7 +38,7 @@ const DashboardHome = ({ options }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="text-lg text-gray-500"
+        className="text-lg text-center text-gray-600"
       >
         Selecciona una opción para empezar
       </motion.p>

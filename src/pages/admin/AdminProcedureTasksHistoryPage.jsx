@@ -4,6 +4,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import useTaskStore from "../../store/useTaskStore";
+import { CircularProgress } from "@mui/material";
 
 const AdminProcedureTasksHistoryPage = () => {
   const { id: startedProcessId } = useParams();
@@ -51,7 +52,7 @@ const AdminProcedureTasksHistoryPage = () => {
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -60,7 +61,7 @@ const AdminProcedureTasksHistoryPage = () => {
       </motion.h1>
 
       {loading ? (
-        <LoadingSpinner />
+        <CircularProgress />
       ) : allStartedTasks.length === 0 ? (
         <p>No hay tareas para este trámite.</p>
       ) : (

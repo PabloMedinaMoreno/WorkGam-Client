@@ -1,29 +1,19 @@
-// src/pages/NotificationsPage.jsx
 import React from "react";
 import { useNotifications } from "../../context/NotificationsContext";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { motion } from "framer-motion";
 import IconButton from "../../components/common/IconButton";
-import { FaEye, FaCheckDouble } from "react-icons/fa";
+import { FaEye, FaCheckDouble, FaTrash, FaTrashAlt } from "react-icons/fa"; // Importando los íconos para eliminar
 
 const NotificationsPage = () => {
-  const { notifications, loading, markAsRead, markAllAsRead } =
+  const { notifications, loading, markAsRead, markAllAsRead, deleteNotification, deleteAllNotifications } =
     useNotifications();
 
   const hasUnread = notifications.some((noti) => !noti.is_read);
 
-  if (loading) {
-    return (
-      <div className="p-8">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -49,15 +39,14 @@ const NotificationsPage = () => {
       )}
 
       {notifications.length === 0 ? (
-        <p className="text-center">No tienes notificaciones.</p>
+        <p className="text-center text-gray-600">No tienes notificaciones.</p>
       ) : (
-        <div className="max-h-[500px] overflow-y-auto pr-2" >
-          
+        <div className="max-h-[500px] overflow-y-auto pr-2">
           <ul className="space-y-4">
             {notifications.map((noti, index) => (
               <motion.li
                 key={noti.id}
-                className="border p-4 rounded bg-white flex justify-between items-center shadow"
+                className="border p-4 rounded bg-white flex justify-between items-center shadow-lg"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -68,19 +57,46 @@ const NotificationsPage = () => {
                     {new Date(noti.created_at).toLocaleString()}
                   </small>
                 </div>
-                {!noti.is_read && (
+                <div className="flex items-center gap-2">
+                  {!noti.is_read && (
+                    <IconButton
+                      variant="success"
+                      onClick={() => markAsRead(noti.id)}
+                      label="Marcar como leído"
+                    >
+                      <FaEye />
+                    </IconButton>
+                  )}
                   <IconButton
-                    variant="success"
-                    onClick={() => markAsRead(noti.id)}
-                    label="Marcar como leído"
+                    variant="danger"
+                    onClick={() => deleteNotification(noti.id)}
+                    label="Eliminar notificación"
                   >
-                    <FaEye />
+                    <FaTrash />
                   </IconButton>
-                )}
+                </div>
               </motion.li>
             ))}
           </ul>
         </div>
+      )}
+
+      {/* Botón para eliminar todas las notificaciones */}
+      {notifications.length > 0 && (
+        <motion.div
+          className="mt-4 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        >
+          <IconButton
+            variant="danger"
+            onClick={deleteAllNotifications}
+            label="Eliminar todas las notificaciones"
+          >
+            <FaTrashAlt />
+          </IconButton>
+        </motion.div>
       )}
     </div>
   );

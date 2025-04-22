@@ -16,9 +16,15 @@ import axiosInstance from "./axios";
  * @param {string} userData.gender - The gender of the new user ('male' or 'female').
  * @returns {Promise<Object>} The registered user data from the API, including user information.
  */
-export const signupRequest = async (userData) => {
-  const response = await axiosInstance.post("/auth/signup", userData);
-  return response.data;
+export const signupService = async (userData) => {
+  try {
+    const response = await axiosInstance.post("/auth/signup", userData);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al registrar el usuario"
+    );
+  }
 };
 
 /**
@@ -34,11 +40,14 @@ export const signupRequest = async (userData) => {
  * @param {string} userData.password - The password for the user.
  * @returns {Promise<Object>} The logged-in user data from the API, including authentication token.
  */
-export const loginRequest = async (userData) => {
-  const response = await axiosInstance.post("/auth/login", userData);
-  return response.data;
+export const loginService = async (userData) => {
+  try {
+    const response = await axiosInstance.post("/auth/login", userData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error al iniciar sesión");
+  }
 };
-
 /**
  * Retrieves the authenticated user's profile.
  *
@@ -48,9 +57,15 @@ export const loginRequest = async (userData) => {
  * @function
  * @returns {Promise<Object>} The profile data of the user, including fields like username, email, and other profile details.
  */
-export const getProfile = async () => {
-  const response = await axiosInstance.get("/auth/profile");
-  return response.data;
+export const profileService = async () => {
+  try {
+    const response = await axiosInstance.get("/auth/profile");
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al obtener el perfil"
+    );
+  }
 };
 
 /**
@@ -66,9 +81,15 @@ export const getProfile = async () => {
  * @param {string} [profileData.phone] - The updated phone number of the user (optional).
  * @returns {Promise<Object>} The updated user data from the API.
  */
-export const updateProfileRequest = async (profileData) => {
-  const response = await axiosInstance.put("/auth/profile", profileData);
-  return response.data;
+export const updateProfileService = async (profileData) => {
+  try {
+    const response = await axiosInstance.put("/auth/profile", profileData);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al actualizar el perfil"
+    );
+  }
 };
 
 /**
@@ -82,13 +103,23 @@ export const updateProfileRequest = async (profileData) => {
  * @param {File} file - The new profile picture file to be uploaded.
  * @returns {Promise<Object>} The updated user data, including the new profile picture URL.
  */
-export const updateProfilePicRequest = async (file) => {
-  const formData = new FormData();
-  formData.append("profilePic", file); // The backend expects "profilePic"
-  const response = await axiosInstance.put("auth/profile/uploadPic", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return response.data;
+export const updateProfilePicService = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("profilePic", file); // The backend expects "profilePic"
+    const response = await axiosInstance.put(
+      "auth/profile/uploadPic",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al actualizar la foto de perfil"
+    );
+  }
 };
 
 /**
@@ -104,28 +135,63 @@ export const updateProfilePicRequest = async (file) => {
  * @param {string} passwordData.confirmPassword - The confirmation of the new password.
  * @returns {Promise<Object>} The response data from the API, including a success message or error.
  */
-export const changePasswordRequest = async (passwordData) => {
-  const response = await axiosInstance.put(
-    "/auth/changePassword",
-    passwordData
-  );
-  return response.data;
-};
-
-export const forgotPasswordService = async (email) => {
+export const changePasswordService = async (passwordData) => {
   try {
-    const response = await axios.post("/forgot-password", { email });
+    const response = await axiosInstance.put(
+      "/auth/changePassword",
+      passwordData
+    );
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Error al enviar el correo");
+    throw new Error(
+      error.response?.data?.message || "Error al cambiar la contraseña"
+    );
   }
 };
 
-export const resetPasswordService = async (token, password) => {
+/**
+ * Sends a password reset email to the user.
+ *
+ * Sends a POST request to the `/auth/forgot-password` endpoint with the user's email address.
+ *
+ * @async
+ * @function
+ * @param {string} email - The email address of the user requesting a password reset.
+ * @returns {Promise<Object>} The response data from the API, including a success message or error.
+ */
+export const forgotPasswordService = async (email) => {
   try {
-    const response = await axios.post(`/reset-password/${token}`, { password });
+    const response = await axiosInstance.post("/auth/forgot-password", {
+      email,
+    });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Error al restablecer la contraseña");
+    throw new Error(
+      error.response?.data?.message || "Error al enviar el correo"
+    );
+  }
+};
+
+/**
+ * Resets the password for the user using a token.
+ *
+ * Sends a POST request to the `/auth/reset-password/:token` endpoint with the new password.
+ *
+ * @async
+ * @function
+ * @param {string} token - The token received in the password reset email.
+ * @param {string} password - The new password to set for the user.
+ * @returns {Promise<Object>} The response data from the API, including a success message or error.
+ */
+export const resetPasswordService = async (token, password) => {
+  try {
+    const response = await axiosInstance.post(`/auth/reset-password/${token}`, {
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al restablecer la contraseña"
+    );
   }
 };

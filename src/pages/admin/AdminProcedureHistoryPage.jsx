@@ -5,10 +5,12 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import useProcedureStore from "../../store/useProcedureStore";
+import { CircularProgress } from "@mui/material";
 
 const AdminProcedureHistoryPage = () => {
   const navigate = useNavigate();
-  const { allStartedProcedures, loading, loadAllStartedProcedures } = useProcedureStore();
+  const { allStartedProcedures, loading, loadAllStartedProcedures } =
+    useProcedureStore();
 
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -53,14 +55,14 @@ const AdminProcedureHistoryPage = () => {
       ? allStartedProcedures
       : allStartedProcedures.filter((proc) => proc.status === statusFilter);
 
-  // if (loading) {
-  //   return <LoadingSpinner />;
-  // }
+  if (loading) {
+    <CircularProgress />;
+  }
 
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -85,10 +87,7 @@ const AdminProcedureHistoryPage = () => {
               <option value="pending" className="bg-yellow-100 text-yellow-800">
                 Pendiente
               </option>
-              <option
-                value="in_progress"
-                className="bg-blue-100 text-blue-800"
-              >
+              <option value="in_progress" className="bg-blue-100 text-blue-800">
                 En Progreso
               </option>
               <option value="completed" className="bg-green-100 text-green-800">

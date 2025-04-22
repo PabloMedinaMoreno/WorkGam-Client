@@ -1,13 +1,12 @@
-// src/components/ui/IconButton.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
 const variantStyles = {
-  primary: "bg-indigo-600 hover:bg-indigo-500 text-white",
-  success: "bg-green-600 hover:bg-green-500 text-white",
-  danger: "bg-red-600 hover:bg-red-500 text-white",
-  neutral: "bg-gray-300 hover:bg-gray-400 text-gray-800",
+  primary: "bg-indigo-700 hover:bg-yellow-500 text-white",
+  success: "bg-green-600 hover:bg-yellow-500 text-white",
+  danger: "bg-red-600 hover:bg-yellow-500 text-white",
+  neutral: "bg-gray-300 hover:bg-yellow-500 text-gray-800",
 };
 
 const IconButton = ({

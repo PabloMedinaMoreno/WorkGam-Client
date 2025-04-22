@@ -1,4 +1,3 @@
-// src/components/gamification/LevelCarousel.jsx
 import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -45,7 +44,7 @@ const LevelCarousel = ({ levels }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="text-3xl font-bold text-center mb-8 text-indigo-800"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
       >
         Niveles de Gamificación
       </motion.h1>
@@ -65,13 +64,13 @@ const LevelCarousel = ({ levels }) => {
           {levels.map((level) => (
             <motion.div
               key={level.id}
-              className="min-w-[250px] m-4 p-4 bg-white rounded-lg shadow-lg flex flex-col items-center"
+              className="min-w-[250px] max-w-[300px] m-4 p-4 bg-white rounded-lg shadow-lg flex flex-col items-center"
               variants={itemVariants}
             >
               <img
                 src={level.image}
                 alt={level.name}
-                className="w-20 h-20 mb-4" // imagen más grande
+                className="w-20 h-20 mb-4 object-cover rounded-full" // Aseguramos que todas las imágenes tengan el mismo tamaño y no se deformen
               />
               <h3 className="text-xl font-bold mb-2">{level.name}</h3>
               <p className="text-sm text-gray-600 text-center">

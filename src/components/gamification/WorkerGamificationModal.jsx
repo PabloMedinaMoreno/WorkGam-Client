@@ -41,7 +41,7 @@ const WorkerGamificationModal = ({ open, onClose, worker }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <div className="relative">
-        <DialogTitle className="text-3xl font-bold text-center">
+        <DialogTitle className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800">
           Estadísticas de Gamificación de {username}
         </DialogTitle>
 

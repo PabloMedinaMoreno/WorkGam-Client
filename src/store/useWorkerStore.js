@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import {
-  fetchWorkers,
-  addWorker,
-  updateWorker,
-  deleteWorkerRequest,
+  fetchWorkersService,
+  createWorkerService,
+  updateWorkerService,
+  deleteWorkerService,
 } from "../services/workerService.js";
 
 /**
@@ -16,7 +16,7 @@ import {
  * @property {Array} workers - The list of all workers.
  * @property {boolean} loading - A boolean indicating if data is currently being loaded.
  * @property {Function} loadWorkers - Loads all workers from the API and updates the store.
- * @property {Function} addOrUpdateWorker - Adds a new worker or updates an existing one.
+ * @property {Function} addOrupdateWorkerService - Adds a new worker or updates an existing one.
  * @property {Function} deleteWorker - Deletes a worker by its ID.
  */
 
@@ -46,12 +46,10 @@ const useWorkerStore = create((set, get) => ({
   loadWorkers: async () => {
     set({ loading: true });
     try {
-      const workers = await fetchWorkers();
+      const workers = await fetchWorkersService();
       set({ workers });
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al cargar los trabajadores";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -70,18 +68,16 @@ const useWorkerStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the worker has been added or updated.
    * @throws {Error} If there is an error adding or updating the worker.
    */
-  addOrUpdateWorker: async (workerData, selectedWorker) => {
+  addOrupdateWorkerService: async (workerData, selectedWorker) => {
     try {
       if (selectedWorker) {
-        const updatedWorker = await updateWorker(selectedWorker.id, workerData);
+        const updatedWorker = await updateWorkerService(selectedWorker.id, workerData);
       } else {
-        const worker = await addWorker(workerData);
+        const worker = await createWorkerService(workerData);
       }
       await get().loadWorkers(); // Refresh the workers list after adding/updating
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al guardar el trabajador";
-      throw new Error(message);
+      throw error;
     }
   },
 
@@ -99,14 +95,12 @@ const useWorkerStore = create((set, get) => ({
    */
   deleteWorker: async (workerId) => {
     try {
-      await deleteWorkerRequest(workerId);
+      await deleteWorkerService(workerId);
       set((state) => ({
         workers: state.workers.filter((worker) => worker.id !== workerId),
       }));
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al eliminar el trabajador";
-      throw new Error(message);
+      throw error;
     }
   },
 }));

@@ -1,4 +1,3 @@
-// src/components/workers/WorkerTable.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import ActionButtons from "../common/ActionButtons";
@@ -23,7 +22,7 @@ const WorkerTable = ({ workers, onEdit, onDelete }) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="border-b hover:bg-gray-100"
+              className="border-b hover:bg-gray-100 cursor-pointer" // Hover para resaltar la fila
             >
               <td className="py-2 px-4 flex items-center">
                 <motion.img
@@ -49,9 +48,7 @@ const WorkerTable = ({ workers, onEdit, onDelete }) => {
           ))}
           {workers.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center py-4">
-                No hay trabajadores registrados.
-              </td>
+              <td colSpan={5} className="text-center py-4">No hay trabajadores registrados.</td>
             </tr>
           )}
         </tbody>

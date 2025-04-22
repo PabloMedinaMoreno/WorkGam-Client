@@ -30,7 +30,7 @@ const RankingTable = ({ ranking, onRowClick }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="text-3xl font-bold text-center mb-8 text-indigo-800"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
       >
         Ranking
       </motion.h1>

@@ -1,4 +1,3 @@
-// src/components/roles/RoleTable.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import ActionButtons from "../common/ActionButtons";
@@ -7,7 +6,7 @@ const RoleTable = ({ roles, onEdit, onDelete }) => {
   return (
     <div className="bg-white rounded-lg shadow-xl p-6 overflow-x-auto max-h-[500px] overflow-y-auto">
       <table className="min-w-full">
-        <thead className="bg-indigo-600 text-white text-left">
+        <thead className="bg-indigo-700 text-white text-left">
           <tr>
             <th className="py-2 px-4">Rol</th>
             <th className="py-2 px-4">Descripción</th>

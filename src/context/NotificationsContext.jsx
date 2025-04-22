@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import {
-  fetchNotifications,
-  markNotificationAsReadRequest,
-  markAllNotificationsAsReadRequest,
+  fetchNotificationsService,
+  markNotificationAsReadService,
+  markAllNotificationsAsReadService,
+  deleteNotificationService,
+  deleteAllNotificationsService,
 } from "../services/notificationService.js";
 
 const NotificationsContext = createContext();
@@ -44,11 +46,11 @@ export const NotificationsProvider = ({ children }) => {
     if (!isAuthenticated) return;
     setLoading(true);
     try {
-      const notifications = await fetchNotifications();
+      const notifications = await fetchNotificationsService();
       setNotifications(notifications);
       setUnreadCount(notifications.filter((n) => !n.is_read).length);
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -56,25 +58,49 @@ export const NotificationsProvider = ({ children }) => {
 
   const markAsRead = async (notificationId) => {
     try {
-      await markNotificationAsReadRequest(notificationId);
+      await markNotificationAsReadService(notificationId);
       setNotifications((prev) =>
         prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n))
       );
       setUnreadCount((prev) => prev - 1);
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      throw error;
     }
   };
 
   const markAllAsRead = async () => {
     try {
-      await markAllNotificationsAsReadRequest();
+      await markAllNotificationsAsReadService();
       setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
       setUnreadCount(0);
     } catch (error) {
-      console.error("Error marking all notifications as read:", error);
+      throw error;
     }
   };
+
+  const deleteNotification = async (notificationId) => {
+    try {
+      await deleteNotificationService(notificationId);
+      setNotifications((prev) =>
+        prev.filter((n) => n.id !== notificationId)
+      );
+      if (notifications.find((n) => n.id === notificationId)?.is_read) {
+        setUnreadCount((prev) => prev - 1);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteAllNotifications = async () => {
+    try {
+      await deleteAllNotificationsService();
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   const handleLevelUp = (levelData) => {
     setNewLevel(levelData);
@@ -92,7 +118,6 @@ export const NotificationsProvider = ({ children }) => {
 
   const clearProgressNotification = () => {
     setNewProgress(null);
-
   };
 
   useEffect(() => {
@@ -129,6 +154,8 @@ export const NotificationsProvider = ({ children }) => {
         loading,
         markAsRead,
         markAllAsRead,
+        deleteNotification,
+        deleteAllNotifications,
         loadNotifications,
         clearLevelUp,
         clearProgressNotification,

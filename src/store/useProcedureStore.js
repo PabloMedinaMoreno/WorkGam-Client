@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import {
-  fetchProcedures,
-  fetchMyStartedProcedures,
-  fetchAllStartedProcedures,
-  addProcedure,
-  updateProcedure,
-  deleteProcedure,
-  startProcedure,
-  cancelStartedProcedure,
+  fetchProceduresService,
+  fetchMyStartedProceduresService,
+  fetchAllStartedProceduresService,
+  createProcedureService,
+  updateProcedureService,
+  deleteProcedureService,
+  startProcedureService,
+  cancelStartedProcedureProcedure,
 } from "../services/procedureService";
 
 /**
@@ -23,9 +23,9 @@ import {
  * @property {Array} allStartedProcedures - The list of all started procedures (used by admins).
  * @property {boolean} loading - A boolean indicating if data is being fetched.
  * @property {Function} loadProcedures - Loads all procedures from the API.
- * @property {Function} addOrUpdateProcedure - Adds a new procedure or updates an existing one.
- * @property {Function} deleteProcedure - Deletes a procedure.
- * @property {Function} startProcedure - Starts a procedure.
+ * @property {Function} addOrupdateProcedureService - Adds a new procedure or updates an existing one.
+ * @property {Function} deleteProcedureService - Deletes a procedure.
+ * @property {Function} startProcedureService - Starts a procedure.
  * @property {Function} loadMyStartedProcedures - Loads all procedures started by the current user.
  * @property {Function} cancelProcedure - Cancels a started procedure.
  * @property {Function} loadAllStartedProcedures - Loads all started procedures (used by admins).
@@ -60,7 +60,7 @@ const useProcedureStore = create((set) => ({
   loadProcedures: async () => {
     set({ loading: true });
     try {
-      const procedures = await fetchProcedures();
+      const procedures = await fetchProceduresService();
       set({ procedures });
     } catch (error) {
       throw new Error(
@@ -84,10 +84,10 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<void>} A promise that resolves when the procedure has been added or updated.
    * @throws {Error} If there is an error saving the procedure.
    */
-  addOrUpdateProcedure: async (procedureData, selectedProcedure) => {
+  addOrupdateProcedureService: async (procedureData, selectedProcedure) => {
     try {
       if (selectedProcedure) {
-        const updatedProcedure = await updateProcedure(
+        const updatedProcedure = await updateProcedureService(
           selectedProcedure.id,
           procedureData
         );
@@ -97,13 +97,11 @@ const useProcedureStore = create((set) => ({
           ),
         }));
       } else {
-        const newProcedure = await addProcedure(procedureData);
+        const newProcedure = await createProcedureService(procedureData);
         set((state) => ({ procedures: [...state.procedures, newProcedure] }));
       }
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error saving procedure"
-      );
+      throw error;
     }
   },
 
@@ -118,16 +116,14 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<void>} A promise that resolves when the procedure has been deleted.
    * @throws {Error} If there is an error deleting the procedure.
    */
-  deleteProcedure: async (procedureId) => {
+  deleteProcedureService: async (procedureId) => {
     try {
-      await deleteProcedure(procedureId);
+      await deleteProcedureService(procedureId);
       set((state) => ({
         procedures: state.procedures.filter((proc) => proc.id !== procedureId),
       }));
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error deleting procedure"
-      );
+      throw error;
     }
   },
 
@@ -144,17 +140,15 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<Object>} A promise that resolves to the started procedure.
    * @throws {Error} If there is an error starting the procedure.
    */
-  startProcedure: async (procedureId, socketId) => {
+  startProcedureService: async (procedureId, socketId) => {
     try {
-      const startedProcedure = await startProcedure(procedureId, socketId);
+      const startedProcedure = await startProcedureService(procedureId, socketId);
       set((state) => ({
         myStartedProcedures: [...state.myStartedProcedures, startedProcedure],
       }));
       return startedProcedure;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error starting procedure"
-      );
+      throw error;
     }
   },
 
@@ -171,12 +165,10 @@ const useProcedureStore = create((set) => ({
   loadMyStartedProcedures: async () => {
     set({ loading: true });
     try {
-      const myStartedProcedures = await fetchMyStartedProcedures();
+      const myStartedProcedures = await fetchMyStartedProceduresService();
       set({ myStartedProcedures });
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error fetching my procedures"
-      );
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -197,16 +189,14 @@ const useProcedureStore = create((set) => ({
    */
   cancelProcedure: async (procedureId, socketId) => {
     try {
-      await cancelStartedProcedure(procedureId, socketId);
+      await cancelStartedProcedureProcedure(procedureId, socketId);
       set((state) => ({
         myStartedProcedures: state.myStartedProcedures.filter(
           (proc) => proc.id !== procedureId
         ),
       }));
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error canceling procedure"
-      );
+      throw error;
     }
   },
 
@@ -224,12 +214,10 @@ const useProcedureStore = create((set) => ({
   loadAllStartedProcedures: async () => {
     set({ loading: true });
     try {
-      const allStartedProcedures = await fetchAllStartedProcedures();
+      const allStartedProcedures = await fetchAllStartedProceduresService();
       set({ allStartedProcedures });
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error fetching started procedures"
-      );
+      throw error;
     } finally {
       set({ loading: false });
     }

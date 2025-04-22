@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ActionButtons = ({ onEdit, onDelete, editLabel = "Editar", deleteLabel = "Eliminar" }) => {
   return (
-    <>
+    <div className="flex items-right justify-center">
       <Tooltip title={editLabel} arrow>
         <IconButton color="primary" onClick={onEdit}>
           <FaEdit />
@@ -16,7 +16,7 @@ const ActionButtons = ({ onEdit, onDelete, editLabel = "Editar", deleteLabel = "
           <FaTrash />
         </IconButton>
       </Tooltip>
-    </>
+    </div>
   );
 };
 

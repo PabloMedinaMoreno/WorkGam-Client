@@ -1,4 +1,3 @@
-// src/components/ui/Sidebar.jsx
 import React from "react";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
@@ -10,8 +9,22 @@ const Sidebar = ({ options }) => {
   // Variantes de animación para el sidebar
   const sidebarVariants = {
     hidden: { x: "-100%", opacity: 0 },
-    visible: { x: 0, opacity: 1 },
-    exit: { x: "-100%", opacity: 0, transition: { duration: 0.3 } },
+    visible: { 
+      x: 0, 
+      opacity: 1, 
+      transition: { 
+        duration: 0.5, 
+        ease: "easeInOut", // Mejora el easing para una transición más suave
+      }
+    },
+    exit: { 
+      x: "-100%", 
+      opacity: 0, 
+      transition: { 
+        duration: 0.5, 
+        ease: "easeInOut", 
+      } 
+    },
   };
 
   const { logout } = useAuth();
@@ -22,7 +35,7 @@ const Sidebar = ({ options }) => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="bg-indigo-700 text-white w-20 md:w-56 h-[80vh] flex flex-col transition-all duration-300 shadow-xl rounded-lg mx-4 my-4"
+      className="bg-gradient-to-b from-indigo-700 to-yellow-600 text-white w-20 md:w-56 h-[80vh] flex flex-col transition-all duration-500 shadow-xl rounded-lg mx-4 my-4"
     >
       <div className="text-center py-6 hidden md:block">
         <h2 className="text-xl font-bold tracking-wide">Menú</h2>
@@ -35,8 +48,8 @@ const Sidebar = ({ options }) => {
             to={option.path}
             className={({ isActive }) =>
               clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-indigo-600",
-                isActive ? "bg-indigo-600 font-semibold" : ""
+                "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 hover:bg-yellow-400",
+                isActive ? "bg-yellow-400 font-semibold" : ""
               )
             }
           >
@@ -51,7 +64,7 @@ const Sidebar = ({ options }) => {
           onClick={logout}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="w-full flex items-center justify-center p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition"
+          className="w-full flex items-center justify-center p-2 bg-yellow-400 text-white hover:bg-indigo-700 hover:text-yellow-500 rounded-lg transition"
         >
           <FaSignOutAlt size={20} />
         </motion.button>

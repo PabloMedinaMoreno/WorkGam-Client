@@ -1,20 +1,15 @@
 // src/pages/gamification/AdminGamificationDashboardPage.jsx
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import RankingTable from "../../components/gamification/RankingTable";
 import LevelCarousel from "../../components/gamification/LevelCarousel";
 import WorkerGamificationModal from "../../components/gamification/WorkerGamificationModal";
 import useGamificationStore from "../../store/useGamificationStore";
 import { toast } from "react-hot-toast";
+import { CircularProgress } from "@mui/material";
 
 const AdminGamificationDashboardPage = () => {
-  const {
-    ranking,
-    levels,
-    loadGamificationRanking,
-    loadGamificationLevels,
-  } = useGamificationStore();
+  const { ranking, levels, loadGamificationRanking, loadGamificationLevels, loading } =
+    useGamificationStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +33,9 @@ const AdminGamificationDashboardPage = () => {
     setModalOpen(true);
   };
 
+  if (loading) {
+    <CircularProgress />;
+  }
 
   return (
     <div className="p-8">

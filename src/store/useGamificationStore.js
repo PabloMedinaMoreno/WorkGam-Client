@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import {
-  fetchEmployeeGamificationStats,
-  fetchLevels,
-  fetchRanking,
-  fetchLevelProgression
+  fetchWorkerStatsService,
+  fetchGamificationLevelsService,
+  fetchGamificationRankingService,
+  fetchLevelProgressionService
 } from "../services/gamificationService";
 
 /**
@@ -52,12 +52,10 @@ const useGamificationStore = create((set) => ({
   getEmployeeGamificationStats: async (employeeId) => {
     set({ loading: true });
     try {
-      const employeeStats = await fetchEmployeeGamificationStats(employeeId);
+      const employeeStats = await fetchWorkerStatsService(employeeId);
       return employeeStats;
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al obtener tus estadísticas";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -78,12 +76,10 @@ const useGamificationStore = create((set) => ({
   loadGamificationRanking: async () => {
     set({ loading: true });
     try {
-      const ranking = await fetchRanking();
+      const ranking = await fetchGamificationRankingService();
       set({ ranking });
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al obtener el ranking";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -104,12 +100,10 @@ const useGamificationStore = create((set) => ({
   loadGamificationLevels: async () => {
     set({ loading: true });
     try {
-      const levels = await fetchLevels();
+      const levels = await fetchGamificationLevelsService();
       set({ levels });
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al obtener los niveles";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -118,12 +112,10 @@ const useGamificationStore = create((set) => ({
   loadLevelProgression: async () => {
     set({ loading: true });
     try {
-      const levelProgression = await fetchLevelProgression();
+      const levelProgression = await fetchLevelProgressionService();
       set({ levelProgression });
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Error al obtener la progresión de niveles";
-      throw new Error(message);
+      throw error;
     } finally {
       set({ loading: false });
     }

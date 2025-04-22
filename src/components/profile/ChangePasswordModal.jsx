@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextField, Button } from "@mui/material";
 import toast from "react-hot-toast";
-import { changePasswordRequest } from "../../services/authService";
+import { changePasswordService } from "../../services/authService";
 import { changePasswordSchema } from "../../schemas/authSchema.js";
 
 /**
@@ -36,7 +36,7 @@ const ChangePasswordModal = ({ onClose }) => {
    */
   const onSubmit = async (data) => {
     try {
-      await changePasswordRequest(data);
+      await changePasswordService(data);
       toast.success("Contraseña cambiada correctamente");
       onClose();
     } catch (error) {
