@@ -81,12 +81,12 @@ export const NotificationsProvider = ({ children }) => {
   const deleteNotification = async (notificationId) => {
     try {
       await deleteNotificationService(notificationId);
+      if (!notifications.find((n) => n.id === notificationId)?.is_read) {
+        setUnreadCount((prev) => prev - 1);
+      }
       setNotifications((prev) =>
         prev.filter((n) => n.id !== notificationId)
       );
-      if (notifications.find((n) => n.id === notificationId)?.is_read) {
-        setUnreadCount((prev) => prev - 1);
-      }
     } catch (error) {
       throw error;
     }

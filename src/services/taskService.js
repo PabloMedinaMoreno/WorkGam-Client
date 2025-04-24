@@ -143,7 +143,7 @@ export const fetchAllStartedTasksService = async (startedProcedureId) => {
     const response = await axiosInstance.get(
       `/procedures/started/${startedProcedureId}/tasks`
     );
-    return response.data.tasks;
+    return response.data;
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Error al obtener las tareas iniciadas"

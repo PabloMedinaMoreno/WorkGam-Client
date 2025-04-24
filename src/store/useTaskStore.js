@@ -97,22 +97,18 @@ const useTaskStore = create((set, get) => ({
   addOrupdateTaskService: async (selectedTask, taskData, procedureId) => {
     try {
       if (selectedTask) {
-        const updatedTaskData = await updateTaskService(
+        await updateTaskService(
           selectedTask.id,
           taskData,
           procedureId
         );
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === selectedTask.id ? updatedTaskData : task
-          ),
-        }));
       } else {
-        const newTask = await createTaskService(taskData, procedureId);
-        set((state) => ({ tasks: [...state.tasks, newTask] }));
+        await createTaskService(taskData, procedureId);
       }
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadTasks(procedureId); // Refresh the tasks after adding/updating
     }
   },
 
@@ -227,6 +223,7 @@ const useTaskStore = create((set, get) => ({
     set({ loading: true });
     try {
       const allStartedTasks = await fetchAllStartedTasksService(startedProcedureId);
+      console.log("All started tasks:", allStartedTasks);
       set({ allStartedTasks });
     } catch (error) {
       throw error;

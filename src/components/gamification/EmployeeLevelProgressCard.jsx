@@ -3,7 +3,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const EmployeeLevelProgressCard = ({ levelProgression }) => {
-  console.log("levelProgression", levelProgression);
   if (!levelProgression) {
     return <div className="text-center text-gray-500">Cargando...</div>;
   }
@@ -22,7 +21,7 @@ const EmployeeLevelProgressCard = ({ levelProgression }) => {
       <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 opacity-20 -z-10"></div>
       
       <motion.h2 
-        className="text-3xl font-bold text-center mb-6 text-indigo-800"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}

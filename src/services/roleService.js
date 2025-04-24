@@ -77,11 +77,13 @@ export const updateRoleService = async (roleId, roleData) => {
  */
 export const deleteRoleService = async (roleId) => {
   try {
-    const response = await axiosInstance.delete(`/roles/${roleId}`);
-    return response.data;
+    console.log(roleId);
+    await axiosInstance.delete(`/roles/${roleId}`);
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Error al eliminar el rol"
-    );
+    ); 
+  } finally {
+    console.log("Role deleted successfully");
   }
 };

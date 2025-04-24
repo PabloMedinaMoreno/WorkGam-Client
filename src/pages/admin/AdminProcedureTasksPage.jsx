@@ -28,6 +28,8 @@ const AdminProcedureTasksPage = () => {
     });
   }, [loadTasks, procedure.id]);
 
+  console.log("Tasks:", tasks);
+
   const [open, setOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -69,7 +71,7 @@ const AdminProcedureTasksPage = () => {
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-semibold text-center mb-4 text-indigo-800"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}

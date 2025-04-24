@@ -47,6 +47,7 @@ const useRoleStore = create((set, get) => ({
    */
   loadRoles: async () => {
     set({ loading: true });
+    console.log("Loading roles...");
     try {
       const roles = await fetchRolesService();
       set({ roles, employeeRoles: roles.map((role) => role.name) });
@@ -70,16 +71,20 @@ const useRoleStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the role has been added or updated.
    * @throws {Error} If there is an error adding or updating the role.
    */
-  addOrupdateRoleService: async (roleData, selectedRole) => {
+  addOrUpdateRole: async (roleData, selectedRole) => {
     try {
       if (selectedRole) {
-        await updateRoleService(selectedRole.id, roleData);
+        await updateRoleService(
+          selectedRole.id,
+          roleData
+        );
       } else {
         await createRoleService(roleData);
       }
-      await get().loadRoles();
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadRoles(); // Refresh the roles after adding/updating
     }
   },
 
@@ -97,9 +102,10 @@ const useRoleStore = create((set, get) => ({
   deleteRole: async (roleId) => {
     try {
       await deleteRoleService(roleId);
-      await get().loadRoles();
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadRoles(); // Refresh the roles after deletion
     }
   },
 }));

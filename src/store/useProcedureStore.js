@@ -87,21 +87,17 @@ const useProcedureStore = create((set) => ({
   addOrupdateProcedureService: async (procedureData, selectedProcedure) => {
     try {
       if (selectedProcedure) {
-        const updatedProcedure = await updateProcedureService(
+        await updateProcedureService(
           selectedProcedure.id,
           procedureData
         );
-        set((state) => ({
-          procedures: state.procedures.map((proc) =>
-            proc.id === selectedProcedure.id ? updatedProcedure : proc
-          ),
-        }));
       } else {
-        const newProcedure = await createProcedureService(procedureData);
-        set((state) => ({ procedures: [...state.procedures, newProcedure] }));
+        await createProcedureService(procedureData);
       }
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadProcedures(); // Refresh the procedures after adding/updating
     }
   },
 
@@ -119,11 +115,10 @@ const useProcedureStore = create((set) => ({
   deleteProcedureService: async (procedureId) => {
     try {
       await deleteProcedureService(procedureId);
-      set((state) => ({
-        procedures: state.procedures.filter((proc) => proc.id !== procedureId),
-      }));
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadProcedures(); // Refresh the procedures after deletion
     }
   },
 

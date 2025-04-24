@@ -150,9 +150,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-      const socketInstance = io(BACKEND_URL, {
+      const socketInstance = io(import.meta.env.VITE_BACKEND_URL, {
         withCredentials: true,
       });
 

@@ -41,7 +41,7 @@ const ClientProcedureTasksTable = ({ procedure, tasks, onFileSelect, onRemoveFil
                     </a>
                     <button
                       onClick={() => onRemoveFile(task.id)}
-                      className="ml-4 text-red-600 hover:text-red-800"
+                      className="ml-4 text-red-600 hover:text-red-800 cursor-pointer"
                       title="Eliminar archivo"
                     >
                       <FaTrash />

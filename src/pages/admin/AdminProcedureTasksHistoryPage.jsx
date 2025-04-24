@@ -18,6 +18,7 @@ const AdminProcedureTasksHistoryPage = () => {
     });
   }, [loadAllStartedTasks, startedProcessId]);
 
+
   const getStatusLabel = (status) => {
     switch (status) {
       case "pending":

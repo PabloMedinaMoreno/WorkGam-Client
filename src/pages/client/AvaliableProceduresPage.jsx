@@ -35,7 +35,7 @@ const AvailableProceduresPage = () => {
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -58,7 +58,9 @@ const AvailableProceduresPage = () => {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <div>
-                <h2 className="text-xl font-semibold mb-2">{proc.name}</h2>
+                <h2 className="text-xl font-semibold mb-2 text-indigo-800" >
+                  {proc.name}
+                </h2>
                 <p className="text-gray-600 mb-4">{proc.description}</p>
               </div>
               <IconButton

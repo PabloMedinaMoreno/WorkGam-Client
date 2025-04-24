@@ -1,103 +1,18 @@
 // src/pages/employee/PendingTasksPage.jsx
 import React, { useEffect, useState } from "react";
-import useTaskStore from "../../store/useTaskStore";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../../context/AuthContext";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import useTaskStore from "../../store/useTaskStore";
 import { motion, AnimatePresence } from "framer-motion";
+import CountdownTimer from "../../components/common/CountdownTimer";
+import RejectTaskModal from "../../components/tasks/RejectTaskModal";
+import { useAuth } from "../../context/AuthContext";
 
-const CountdownTimer = ({ initialTimeLeftMs }) => {
-  // Estado local para controlar el tiempo restante
-  const [timeLeftMs, setTimeLeftMs] = useState(initialTimeLeftMs);
-
-  useEffect(() => {
-    // Disminuye en 1 segundo el tiempo restante cada 1000ms
-    const timer = setInterval(() => {
-      setTimeLeftMs((prev) => prev - 1000);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Si el tiempo es negativo, calculamos el retraso
-  const isOverdue = timeLeftMs < 0;
-  const displayMs = Math.abs(timeLeftMs);
-
-  // Convertimos ms a días, horas, minutos, segundos
-  const days = Math.floor(displayMs / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((displayMs / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((displayMs / (1000 * 60)) % 60);
-  const seconds = Math.floor((displayMs / 1000) % 60);
-
-  if (isOverdue) {
-    return (
-      <span className="text-red-600 font-semibold text-sm">
-        Retrasada por {days}d {hours}h {minutes}m {seconds}s
-      </span>
-    );
-  }
-
-  return (
-    <span className="text-green-600 font-semibold text-sm">
-      Quedan {days}d {hours}h {minutes}m {seconds}s
-    </span>
-  );
-};
-
-
-/* Componente RejectTaskModal:
-   Modal animado para solicitar el motivo de rechazo de la tarea.
-   Sin fondo opaco, permitiendo ver el contenido detrás. */
-const RejectTaskModal = ({ task, onConfirm, onCancel }) => {
-  const [reason, setReason] = useState("");
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
-        // Eliminamos bg-black y bg-opacity para que se vea el contenido detrás
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <motion.div
-          className="bg-white rounded-lg p-6 w-96 pointer-events-auto shadow-lg"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-        >
-          <h2 className="text-xl font-bold mb-4">Motivo de Rechazo</h2>
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            className="w-full p-2 border rounded mb-4"
-            placeholder="Escribe el motivo de rechazo..."
-          />
-          <div className="flex justify-end gap-4">
-            <button
-              onClick={onCancel}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={() => {
-                onConfirm(reason);
-                setReason("");
-              }}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Confirmar
-            </button>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
-};
-
+/**
+ * Página de Tareas Pendientes donde se gestionan las tareas que el usuario aún no ha completado.
+ */
 const PendingTasksPage = () => {
-  const { pendingTasks, loadMyPendingTasks, acceptTask, rejectTask, loading } = useTaskStore();
+  const { pendingTasks, loadMyPendingTasks, acceptTask, rejectTask, loading } =
+    useTaskStore();
   const { socket } = useAuth();
   const [rejectingTask, setRejectingTask] = useState(null);
 
@@ -116,12 +31,10 @@ const PendingTasksPage = () => {
     }
   };
 
-  // Abre el modal de rechazo para la tarea en cuestión
   const handleOpenRejectModal = (task) => {
     setRejectingTask(task);
   };
 
-  // Confirma el rechazo
   const handleConfirmReject = async (reason) => {
     if (!reason.trim()) {
       toast.error("Por favor, ingresa un motivo de rechazo.");
@@ -136,18 +49,10 @@ const PendingTasksPage = () => {
     }
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="p-8">
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -172,14 +77,12 @@ const PendingTasksPage = () => {
               </h2>
               <p className="text-gray-600">{task.task_description}</p>
 
-              {/* Si el backend te da time_left_ms, lo usamos en el CountdownTimer */}
               {typeof task.time_left_ms === "number" && (
                 <div className="mt-2">
                   <CountdownTimer initialTimeLeftMs={task.time_left_ms} />
                 </div>
               )}
 
-              {/* Enlace al documento subido, si existe */}
               {task.document_uploaded && (
                 <a
                   href={task.document_uploaded}
@@ -210,7 +113,6 @@ const PendingTasksPage = () => {
         </div>
       )}
 
-      {/* Modal de rechazo, con animaciones */}
       <AnimatePresence>
         {rejectingTask && (
           <RejectTaskModal

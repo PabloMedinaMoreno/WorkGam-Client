@@ -67,11 +67,13 @@ const LevelCarousel = ({ levels }) => {
               className="min-w-[250px] max-w-[300px] m-4 p-4 bg-white rounded-lg shadow-lg flex flex-col items-center"
               variants={itemVariants}
             >
-              <img
-                src={level.image}
-                alt={level.name}
-                className="w-20 h-20 mb-4 object-cover rounded-full" // Aseguramos que todas las imágenes tengan el mismo tamaño y no se deformen
-              />
+              <div className="w-20 h-20 mb-4 rounded-full overflow-hidden border-2 border-white shadow-md">
+  <img
+    src={level.image}
+    alt={level.name}
+    className="w-full h-full object-cover"
+  />
+</div>
               <h3 className="text-xl font-bold mb-2">{level.name}</h3>
               <p className="text-sm text-gray-600 text-center">
                 {level.description}

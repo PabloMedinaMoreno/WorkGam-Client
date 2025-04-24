@@ -54,7 +54,7 @@ const ClientProcedureTasksPage = () => {
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-4 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -85,7 +85,7 @@ const ClientProcedureTasksPage = () => {
       >
         <button
           onClick={handleConfirm}
-          className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-md flex items-center gap-2 transition"
+          className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-md flex items-center gap-2 transition cursor-pointer"
         >
           <FaCheckCircle className="text-lg" />
           Confirmar Subidas

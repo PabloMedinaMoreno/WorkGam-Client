@@ -7,13 +7,14 @@ import { resetPasswordService } from "../../services/authService";
 import Card from "../../components/common/Card";
 import Label from "../../components/common/Label";
 import Input from "../../components/common/Input";
-import IconButton from "../../components/common/IconButton"; // Importando IconButton
-import { FaLock } from "react-icons/fa"; // Ícono de candado
+import IconButton from "../../components/common/IconButton";
+import { FaLock } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import { motion } from "framer-motion";
 
 /**
- * Página de restablecimiento de contraseña.
- * Permite a los usuarios restablecer su contraseña utilizando un token de verificación.
+ * Página de restablecimiento de contraseña con animación de Framer Motion
+ * y estela amarilla alrededor de la carta.
  *
  * @returns {JSX.Element} La página de restablecimiento de contraseña.
  */
@@ -26,22 +27,14 @@ function ResetPasswordPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(resetPasswordSchema),
-  });
+  } = useForm({ resolver: zodResolver(resetPasswordSchema) });
 
-  /**
-   * Manejador de envío del formulario de restablecimiento de contraseña.
-   * Restablece la contraseña con la nueva proporcionada.
-   *
-   * @param {object} data Los datos del formulario (nueva contraseña).
-   */
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       await resetPasswordService(token, data.password);
       toast.success("Contraseña restablecida con éxito");
-      navigate("/login"); // Redirigir al usuario a la página de inicio de sesión después de restablecer la contraseña
+      navigate("/login");
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -50,40 +43,56 @@ function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md p-8 shadow-lg">
-        <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
-          Restablecer Contraseña
-        </h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="password">Nueva Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="*****"
-              {...register("password")}
-              className="mt-1"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+    <div className="min-h-screen flex items-center justify-center py-6">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative w-full max-w-md"
+      >
+        {/* Efecto de estela amarilla */}
+        <motion.div
+          initial={{ boxShadow: "0 0 0px rgba(255, 255, 0, 0)" }}
+          animate={{ boxShadow: [
+            "0 0 0px rgba(255, 255, 0, 0)",
+            "0 0 20px rgba(255, 255, 0, 0.8)",
+            "0 0 0px rgba(255, 255, 0, 0)"
+          ] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 rounded-lg"
+        />
 
-          {/* Botón de restablecimiento con IconButton */}
-          <IconButton
-            variant="primary"
-            className="w-full bg-indigo-700 hover:bg-indigo-600 text-white flex items-center justify-center"
-            type="submit"
-            disabled={loading} // Deshabilitar el botón si está en proceso de carga
-          >
-            <FaLock />
-            {loading ? "Restableciendo..." : "Restablecer Contraseña"}
-          </IconButton>
-        </form>
-      </Card>
+        <Card className="w-full p-8 shadow-lg rounded-lg bg-white relative">
+          <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
+            Restablecer Contraseña
+          </h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="password">Nueva Contraseña</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="*****"
+                {...register("password")}
+                className="mt-1"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              )}
+            </div>
+
+            <IconButton
+              variant="primary"
+              className="w-full bg-indigo-700 hover:bg-indigo-600 text-white flex items-center justify-center"
+              type="submit"
+              disabled={loading}
+            >
+              <FaLock className="mr-2" />
+              {loading ? "Restableciendo..." : "Restablecer Contraseña"}
+            </IconButton>
+          </form>
+        </Card>
+      </motion.div>
       <Toaster />
     </div>
   );

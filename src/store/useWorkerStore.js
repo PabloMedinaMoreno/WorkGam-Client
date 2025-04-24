@@ -71,13 +71,14 @@ const useWorkerStore = create((set, get) => ({
   addOrupdateWorkerService: async (workerData, selectedWorker) => {
     try {
       if (selectedWorker) {
-        const updatedWorker = await updateWorkerService(selectedWorker.id, workerData);
+        await updateWorkerService(selectedWorker.id, workerData);
       } else {
-        const worker = await createWorkerService(workerData);
+        await createWorkerService(workerData);
       }
-      await get().loadWorkers(); // Refresh the workers list after adding/updating
     } catch (error) {
-      throw error;
+      throw error; 
+    } finally {
+      await get().loadWorkers(); // Refresh the workers list after adding/updating
     }
   },
 
@@ -96,11 +97,10 @@ const useWorkerStore = create((set, get) => ({
   deleteWorker: async (workerId) => {
     try {
       await deleteWorkerService(workerId);
-      set((state) => ({
-        workers: state.workers.filter((worker) => worker.id !== workerId),
-      }));
     } catch (error) {
       throw error;
+    } finally {
+      await get().loadWorkers(); // Refresh the workers list after deletion
     }
   },
 }));

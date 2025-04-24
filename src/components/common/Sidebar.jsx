@@ -59,16 +59,16 @@ const Sidebar = ({ options }) => {
         ))}
       </nav>
 
-      <div className="mt-auto px-4 py-4">
+      {/* <div className="mt-auto px-4 py-4">
         <motion.button
           onClick={logout}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="w-full flex items-center justify-center p-2 bg-yellow-400 text-white hover:bg-indigo-700 hover:text-yellow-500 rounded-lg transition"
+          className="w-full flex items-center justify-center p-2 bg-yellow-400 text-white hover:bg-indigo-700 hover:text-yellow-500 rounded-lg transition cursor-pointer"
         >
           <FaSignOutAlt size={20} />
         </motion.button>
-      </div>
+      </div> */}
     </motion.aside>
   );
 };

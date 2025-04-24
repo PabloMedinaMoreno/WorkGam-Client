@@ -5,7 +5,7 @@ import axios from "axios";
  * Configured with base URL and credentials.
  */
 const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
   withCredentials: true,
 });
 

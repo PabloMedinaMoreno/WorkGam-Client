@@ -12,7 +12,7 @@ export default function HomePage() {
           <motion.img
             src="/images/workgam-logo.png" // Asegúrate de que la ruta sea correcta
             alt="WorkGam Logo"
-            className="w-32 h-auto mb-8" // Ajusta el tamaño del logo
+            className="w-32 h-auto mb-8 mx-auto" // Centrado horizontal con mx-auto
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -66,22 +66,22 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                icon: <Smartphone className="h-10 w-10 text-yellow-500" />,
+                icon: <Smartphone className="h-10 w-10 text-yellow-500" />,  
                 title: "Accesibilidad",
                 desc: "Gestiona trámites desde cualquier dispositivo, en cualquier lugar y momento.",
               },
               {
-                icon: <Shield className="h-10 w-10 text-yellow-500" />,
+                icon: <Shield className="h-10 w-10 text-yellow-500" />,  
                 title: "Seguridad",
                 desc: "Protección con JWT, Zod y AWS S3 para mantener la confidencialidad de tus datos.",
               },
               {
-                icon: <UserCheck className="h-10 w-10 text-yellow-500" />,
+                icon: <UserCheck className="h-10 w-10 text-yellow-500" />,  
                 title: "Workflow Inteligente",
                 desc: "Automatiza la asignación de tareas según roles y propaga estados en tiempo real.",
               },
               {
-                icon: <Award className="h-10 w-10 text-yellow-500" />,
+                icon: <Award className="h-10 w-10 text-yellow-500" />,  
                 title: "Gamificación",
                 desc: "Puntos, niveles y rankings que incentivan la productividad y la competencia sana.",
               },

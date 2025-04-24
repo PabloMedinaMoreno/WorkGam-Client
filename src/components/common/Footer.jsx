@@ -23,7 +23,7 @@ export default function Footer() {
           <motion.img
             src="/images/workgam-logo.png"
             alt="WorkGam Logo"
-            className="h-12 w-auto"
+            className="h-12 w-auto cursor-pointer"
             whileHover={{ scale: 1.2 }}
           />
           <motion.span

@@ -11,10 +11,12 @@ import Button from "../../components/common/Button";
 import IconButton from "../../components/common/IconButton"; // Importando IconButton
 import { FaEye, FaEyeSlash, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
+import { motion } from "framer-motion";
 
 /**
  * Página de inicio de sesión.
  * Permite a los usuarios iniciar sesión utilizando su correo electrónico y contraseña.
+ * Incluye animación de entrada y estela amarilla alrededor de la carta.
  *
  * @returns {JSX.Element} La página de inicio de sesión.
  */
@@ -54,73 +56,94 @@ function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md p-8 shadow-lg">
-        <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
-          Inicio de Sesión
-        </h1>
+    <div className="min-h-screen flex items-center justify-center ">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative w-full max-w-md"
+      >
+        {/* Efecto de estela amarilla */}
+        <motion.div
+          initial={{ boxShadow: "0 0 0px rgba(255, 255, 0, 0)" }}
+          animate={{ boxShadow: [
+            "0 0 0px rgba(255, 255, 0, 0)",
+            "0 0 20px rgba(255, 255, 0, 0.8)",
+            "0 0 0px rgba(255, 255, 0, 0)"
+          ] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 rounded-lg"
+        />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Correo Electrónico */}
-          <div>
-            <Label htmlFor="email">Correo Electrónico</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="tuemail@dominio.com"
-              {...register("email")}
-              className="mt-1"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
-          </div>
+        <Card className="w-full p-8 shadow-lg rounded-lg bg-white relative">
+          <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800"> 
 
-          {/* Contraseña con icono de mostrar/ocultar */}
-          <div>
-            <Label htmlFor="password">Contraseña</Label>
-            <div className="relative">
+          {/* bg-gradient-to-r from-indigo-700 to-yellow-600 text-transparent bg-clip-text */}
+            Inicio de Sesión
+          </h1>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Correo Electrónico */}
+            <div>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="*****"
-                {...register("password")}
-                className="mt-1 pr-10 w-full"
+                id="email"
+                type="email"
+                placeholder="tuemail@dominio.com"
+                {...register("email")}
+                className="mt-1"
               />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-indigo-600"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              )}
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-            )}
+
+            {/* Contraseña con icono de mostrar/ocultar */}
+            <div>
+              <Label htmlFor="password">Contraseña</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*****"
+                  {...register("password")}
+                  className="mt-1 pr-10 w-full"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-indigo-600 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              )}
+            </div>
+
+            {/* Botón de iniciar sesión con IconButton */}
+            <IconButton
+              variant="primary"
+              className="w-full bg-indigo-700 hover:bg-indigo-600 text-white flex items-center justify-center"
+              type="submit"
+            >
+              <FaSignInAlt className="mr-2" />
+              Iniciar sesión
+            </IconButton>
+          </form>
+
+          {/* Enlaces adicionales */}
+          <div className="flex justify-between mt-4">
+            <Link to="/forgot-password" className="text-indigo-700 font-medium">
+              ¿Olvidaste tu contraseña?
+            </Link>
+            <Link to="/register" className="text-indigo-700 font-medium">
+              Crear cuenta
+            </Link>
           </div>
-
-          {/* Botón de iniciar sesión con IconButton */}
-          <IconButton
-            variant="primary"
-            className="w-full bg-indigo-700 hover:bg-indigo-600 text-white flex items-center justify-center"
-            type="submit"
-          >
-            <FaSignInAlt />
-            Iniciar sesión
-          </IconButton>
-        </form>
-
-        {/* Enlaces adicionales */}
-        <div className="flex justify-between mt-4">
-          <Link to="/forgot-password" className="text-indigo-700 font-medium">
-            ¿Olvidaste tu contraseña?
-          </Link>
-          <Link to="/register" className="text-indigo-700 font-medium">
-            Crear cuenta
-          </Link>
-        </div>
-      </Card>
+        </Card>
+      </motion.div>
       <Toaster />
     </div>
   );

@@ -21,9 +21,10 @@ const NotificationsPage = () => {
         Notificaciones
       </motion.h1>
 
+      {/* Alineación de botones de "Marcar todas como leídas" y "Eliminar todas las notificaciones" */}
       {hasUnread && (
         <motion.div
-          className="mb-4"
+          className="flex justify-center gap-4 mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
@@ -34,6 +35,13 @@ const NotificationsPage = () => {
             label="Marcar todas como leídas"
           >
             <FaCheckDouble />
+          </IconButton>
+          <IconButton
+            variant="danger"
+            onClick={deleteAllNotifications}
+            label="Eliminar todas las notificaciones"
+          >
+            <FaTrashAlt />
           </IconButton>
         </motion.div>
       )}
@@ -58,6 +66,7 @@ const NotificationsPage = () => {
                   </small>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* Solo los iconos de marcar como leído y eliminar */}
                   {!noti.is_read && (
                     <IconButton
                       variant="success"
@@ -79,24 +88,6 @@ const NotificationsPage = () => {
             ))}
           </ul>
         </div>
-      )}
-
-      {/* Botón para eliminar todas las notificaciones */}
-      {notifications.length > 0 && (
-        <motion.div
-          className="mt-4 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-        >
-          <IconButton
-            variant="danger"
-            onClick={deleteAllNotifications}
-            label="Eliminar todas las notificaciones"
-          >
-            <FaTrashAlt />
-          </IconButton>
-        </motion.div>
       )}
     </div>
   );

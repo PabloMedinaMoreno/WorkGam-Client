@@ -50,20 +50,10 @@ const MyProceduresPage = () => {
     }
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="p-8">
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
-  // }
-
-  console.log("Mis trámites iniciados:", myStartedProcedures);
-
   return (
     <div className="p-8">
       <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
+        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
