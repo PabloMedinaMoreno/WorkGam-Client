@@ -7,6 +7,7 @@ import {
   profileService,
   updateProfileService,
   updateProfilePicService,
+  logoutService,
 } from "../services/authService.js";
 
 /**
@@ -93,8 +94,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    Cookies.remove("token");
+  const logout = async() => {
+    // Cookies.remove("token");
+    await logoutService();
     setUser(null);
     setIsAuthenticated(false);
     setLoading(false);
