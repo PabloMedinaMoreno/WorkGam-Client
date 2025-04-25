@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { io } from "socket.io-client";
 import {
   signupService,
@@ -68,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
-  console.log(user)
+  console.log(user);
 
   const signup = async (userData) => {
     try {
@@ -94,8 +93,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async() => {
-    // Cookies.remove("token");
+  const logout = async () => {
     await logoutService();
     setUser(null);
     setIsAuthenticated(false);
@@ -129,23 +127,21 @@ export const AuthProvider = ({ children }) => {
     const checkLogin = async () => {
       console.log("Checking login status...");
       setLoading(true);
-      const token = Cookies.get("token");
-      if (!token) {
-        console.log("No token found, user is not authenticated.");
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
       try {
-        console.log("Token found, checking user profile...");
         const user = await profileService();
+        if (!user) {
+          setIsAuthenticated(false);
+          setUser(null);
+          setLoading(false);
+          console.log("User not authenticated");
+          return;
+        }
         setUser(user);
         setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
-        Cookies.remove("token");
-        throw error;
+        console.error("Error checking login status:", error);
       } finally {
         setLoading(false);
       }
@@ -155,7 +151,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-
       const socketInstance = io(import.meta.env.VITE_BACKEND_URL, {
         withCredentials: true,
       });
