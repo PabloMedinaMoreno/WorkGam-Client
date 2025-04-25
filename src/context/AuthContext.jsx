@@ -127,14 +127,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
+      console.log("Checking login status...");
       setLoading(true);
       const token = Cookies.get("token");
       if (!token) {
+        console.log("No token found, user is not authenticated.");
         setIsAuthenticated(false);
         setLoading(false);
         return;
       }
       try {
+        console.log("Token found, checking user profile...");
         const user = await profileService();
         setUser(user);
         setIsAuthenticated(true);
