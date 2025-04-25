@@ -63,9 +63,7 @@ const useProcedureStore = create((set) => ({
       const procedures = await fetchProceduresService();
       set({ procedures });
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error fetching procedures"
-      );
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -84,7 +82,7 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<void>} A promise that resolves when the procedure has been added or updated.
    * @throws {Error} If there is an error saving the procedure.
    */
-  addOrupdateProcedureService: async (procedureData, selectedProcedure) => {
+  addOrUpdateProcedure: async (procedureData, selectedProcedure) => {
     try {
       if (selectedProcedure) {
         await updateProcedureService(
@@ -112,7 +110,7 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<void>} A promise that resolves when the procedure has been deleted.
    * @throws {Error} If there is an error deleting the procedure.
    */
-  deleteProcedureService: async (procedureId) => {
+  deleteProcedure: async (procedureId) => {
     try {
       await deleteProcedureService(procedureId);
     } catch (error) {
@@ -135,7 +133,7 @@ const useProcedureStore = create((set) => ({
    * @returns {Promise<Object>} A promise that resolves to the started procedure.
    * @throws {Error} If there is an error starting the procedure.
    */
-  startProcedureService: async (procedureId, socketId) => {
+  startProcedure: async (procedureId, socketId) => {
     try {
       const startedProcedure = await startProcedureService(procedureId, socketId);
       set((state) => ({

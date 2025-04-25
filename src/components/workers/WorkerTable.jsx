@@ -36,7 +36,7 @@ const WorkerTable = ({ workers, onEdit, onDelete }) => {
               <td className="py-2 px-4">{worker.email}</td>
               <td className="py-2 px-4">{worker.phone || "N/A"}</td>
               <td className="py-2 px-4">{worker.role}</td>
-              <td className="py-2 px-4 text-right">
+              <td className="py-2 px-4 flex justify-end">
                 <ActionButtons
                   onEdit={() => onEdit(worker)}
                   onDelete={() => onDelete(worker.id)}

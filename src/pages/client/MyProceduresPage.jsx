@@ -50,6 +50,14 @@ const MyProceduresPage = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <motion.h1

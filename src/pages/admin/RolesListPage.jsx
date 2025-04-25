@@ -62,13 +62,13 @@ const RolesListPage = () => {
     }
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="w-full h-screen flex justify-center items-center">
-  //       <CircularProgress size={60} color="primary" />
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">

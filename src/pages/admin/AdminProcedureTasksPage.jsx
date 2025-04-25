@@ -20,7 +20,8 @@ const AdminProcedureTasksPage = () => {
     return <div>No se encontró el trámite</div>;
   }
 
-  const { tasks, loading, addOrUpdateTask, deleteTask, loadTasks } = useTaskStore();
+  const { tasks, loading, addOrUpdateTask, deleteTask, loadTasks } =
+    useTaskStore();
 
   useEffect(() => {
     loadTasks(procedure.id).catch((error) => {
@@ -67,6 +68,14 @@ const AdminProcedureTasksPage = () => {
       toast.error(error.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">

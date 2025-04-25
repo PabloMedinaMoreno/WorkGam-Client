@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 
-const ProgressNotification = ({ progress, onClose }) => {
+const LevelProgressAnimation = ({ progress, onClose }) => {
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -115,4 +115,4 @@ const ProgressNotification = ({ progress, onClose }) => {
   );
 };
 
-export default ProgressNotification;
+export default LevelProgressAnimation;

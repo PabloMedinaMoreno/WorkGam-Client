@@ -34,7 +34,7 @@ const ProcedureTable = ({ procedures, onEdit, onDelete }) => {
               <td className="py-2 px-4 font-medium">{procedure.name}</td>
               <td className="py-2 px-4">{procedure.description}</td>
               <td
-                className="py-2 px-4 text-right"
+                className="py-2 px-4 flex justify-end"
                 onClick={(e) => e.stopPropagation()} // Evita que al hacer click en los botones se dispare la navegación
               >
                 <ActionButtons

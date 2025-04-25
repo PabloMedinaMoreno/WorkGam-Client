@@ -5,10 +5,25 @@ import IconButton from "../../components/common/IconButton";
 import { FaEye, FaCheckDouble, FaTrash, FaTrashAlt } from "react-icons/fa"; // Importando los íconos para eliminar
 
 const NotificationsPage = () => {
-  const { notifications, loading, markAsRead, markAllAsRead, deleteNotification, deleteAllNotifications } =
-    useNotifications();
+  const {
+    notifications,
+    loading,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+    deleteAllNotifications,
+  } = useNotifications();
 
-  const hasUnread = notifications.some((noti) => !noti.is_read);
+  const hasUnread = notifications.some((noti) => !noti.is_read); // Verificar si hay notificaciones no leídas
+  const hasNotifications = notifications.length > 0; // Verificar si hay notificaciones
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">
@@ -21,14 +36,16 @@ const NotificationsPage = () => {
         Notificaciones
       </motion.h1>
 
-      {/* Alineación de botones de "Marcar todas como leídas" y "Eliminar todas las notificaciones" */}
-      {hasUnread && (
-        <motion.div
-          className="flex justify-center gap-4 mb-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-        >
+      {/* Mostrar los botones solo si hay notificaciones no leídas o alguna notificación */}
+      <motion.div
+        className={`flex justify-center gap-4 mb-4 ${
+          !hasNotifications ? "hidden" : ""
+        }`} // Solo se muestra si hay notificaciones
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        {hasUnread && (
           <IconButton
             variant="success"
             onClick={markAllAsRead}
@@ -36,6 +53,9 @@ const NotificationsPage = () => {
           >
             <FaCheckDouble />
           </IconButton>
+        )}
+
+        {hasNotifications && (
           <IconButton
             variant="danger"
             onClick={deleteAllNotifications}
@@ -43,8 +63,8 @@ const NotificationsPage = () => {
           >
             <FaTrashAlt />
           </IconButton>
-        </motion.div>
-      )}
+        )}
+      </motion.div>
 
       {notifications.length === 0 ? (
         <p className="text-center text-gray-600">No tienes notificaciones.</p>

@@ -1,35 +1,35 @@
 // src/pages/common/DashboardLayout.jsx
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
-import useTaskStore from '../../store/useTaskStore';
-import useRoleStore from '../../store/useRoleStore';
-import ProtectedRoute from '../../routes';
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
+import useTaskStore from "../../store/useTaskStore";
+import useRoleStore from "../../store/useRoleStore";
+import ProtectedRoute from "../../routes";
 
-import Sidebar from '../../components/common/Sidebar';
-import DashboardHome from './DashboardHome';
-import ProfilePage from './ProfilePage';
-import NotificationsPage from './NotificationsPage';
+import Sidebar from "../../components/common/Sidebar";
+import DashboardHome from "./DashboardHome";
+import ProfilePage from "./ProfilePage";
+import NotificationsPage from "./NotificationsPage";
 
 // Admin pages
-import ProceduresListPage from '../admin/ProceduresListPage';
-import AdminProcedureTasksPage from '../admin/AdminProcedureTasksPage';
-import RolesListPage from '../admin/RolesListPage';
-import WorkerListPage from '../admin/WorkerListPage';
-import AdminGamificationDashboardPage from '../admin/AdminGamificationDashboardPage';
-import AdminProcedureHistoryPage from '../admin/AdminProcedureHistoryPage';
-import AdminProcedureTasksHistoryPage from '../admin/AdminProcedureTasksHistoryPage';
+import ProceduresListPage from "../admin/ProceduresListPage";
+import AdminProcedureTasksPage from "../admin/AdminProcedureTasksPage";
+import RolesListPage from "../admin/RolesListPage";
+import WorkerListPage from "../admin/WorkerListPage";
+import AdminGamificationDashboardPage from "../admin/AdminGamificationDashboardPage";
+import AdminProcedureHistoryPage from "../admin/AdminProcedureHistoryPage";
+import AdminProcedureTasksHistoryPage from "../admin/AdminProcedureTasksHistoryPage";
 
 // Client pages
-import AvailableProceduresPage from '../client/AvaliableProceduresPage';
-import MyProceduresPage from '../client/MyProceduresPage';
-import ClientProcedureTasksPage from '../client/ClientProcedureTasksPage';
+import AvailableProceduresPage from "../client/AvaliableProceduresPage";
+import MyProceduresPage from "../client/MyProceduresPage";
+import ClientProcedureTasksPage from "../client/ClientProcedureTasksPage";
 
 // Employee pages
-import PendingTasksPage from '../employee/PendingTasksPage';
-import CompletedTasksPage from '../employee/CompletedTasksPage';
-import EmployeeGamificationDashboardPage from '../employee/EmployeeGamificationDashboardPage';
+import PendingTasksPage from "../employee/PendingTasksPage";
+import CompletedTasksPage from "../employee/CompletedTasksPage";
+import EmployeeGamificationDashboardPage from "../employee/EmployeeGamificationDashboardPage";
 
 import {
   FaUser,
@@ -45,25 +45,26 @@ import {
 
 import NotificationIcon from "../../components/common/NotificationIcon";
 import PendingTasksIcon from "../../components/common/PendingTasksIcon";
+import { useNotifications } from "../../context/NotificationsContext";
+import LevelUpAnimation from "../../components/gamification/LevelUpAnimation";
+import LevelProgressAnimation from "../../components/gamification/LevelProgressAnimation";
 
 export default function DashboardLayout({ sidebarOpen }) {
   const { user } = useAuth();
   const { employeeRoles } = useRoleStore();
+  const { newLevel, newProgress, clearLevelUp, clearProgressNotification } =
+    useNotifications();
 
   // Carga inicial de tareas para empleados
   useEffect(() => {
-    if (user?.role === 'Empleado') {
+    // Si el usuario no es cliente ni administrador, carga las tareas pendientes
+    if (user?.role && !["Cliente", "Administrador"].includes(user.role)) {
       useTaskStore.getState().loadMyPendingTasks();
     }
   }, [user]);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
   // Roles comunes para todos los usuarios
-  const commonRoles = [...employeeRoles, 'Cliente', 'Administrador'];
-
+  const commonRoles = [...employeeRoles, "Cliente", "Administrador"];
 
   const menuOptions = {
     Administrador: [
@@ -136,13 +137,24 @@ export default function DashboardLayout({ sidebarOpen }) {
 
   const options = menuOptions[user.role] || employeeOptions;
 
-
   return (
     <div className="flex">
       <AnimatePresence>
         {sidebarOpen && <Sidebar options={options} />}
       </AnimatePresence>
       <div className="flex-1 p-4 overflow-auto">
+        {/* Mostrar la animación de nivel si está disponible */}
+        {newLevel && (
+          <LevelUpAnimation level={newLevel} onClose={clearLevelUp} />
+        )}
+
+        {/* Mostrar la notificación de progreso si está disponible */}
+        {newProgress && (
+          <LevelProgressAnimation
+            progress={newProgress}
+            onClose={clearProgressNotification}
+          />
+        )}
         <Routes>
           {/* Dashboard home (todos los roles) */}
           <Route
@@ -176,7 +188,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/procedures"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <ProceduresListPage />
               </ProtectedRoute>
             }
@@ -184,7 +196,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/procedures/:id/tasks"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <AdminProcedureTasksPage />
               </ProtectedRoute>
             }
@@ -192,7 +204,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/roles"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <RolesListPage />
               </ProtectedRoute>
             }
@@ -200,7 +212,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/workers"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <WorkerListPage />
               </ProtectedRoute>
             }
@@ -208,7 +220,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/gamification"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <AdminGamificationDashboardPage />
               </ProtectedRoute>
             }
@@ -216,7 +228,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/procedure-history"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <AdminProcedureHistoryPage />
               </ProtectedRoute>
             }
@@ -224,7 +236,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="admin/procedure-history/:id/tasks"
             element={
-              <ProtectedRoute allowedRoles={['Administrador']}>
+              <ProtectedRoute allowedRoles={["Administrador"]}>
                 <AdminProcedureTasksHistoryPage />
               </ProtectedRoute>
             }
@@ -234,7 +246,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="client/procedures"
             element={
-              <ProtectedRoute allowedRoles={['Cliente']}>
+              <ProtectedRoute allowedRoles={["Cliente"]}>
                 <AvailableProceduresPage />
               </ProtectedRoute>
             }
@@ -242,7 +254,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="client/myprocedures"
             element={
-              <ProtectedRoute allowedRoles={['Cliente']}>
+              <ProtectedRoute allowedRoles={["Cliente"]}>
                 <MyProceduresPage />
               </ProtectedRoute>
             }
@@ -250,7 +262,7 @@ export default function DashboardLayout({ sidebarOpen }) {
           <Route
             path="client/procedures/:id/tasks"
             element={
-              <ProtectedRoute allowedRoles={['Cliente']}>
+              <ProtectedRoute allowedRoles={["Cliente"]}>
                 <ClientProcedureTasksPage />
               </ProtectedRoute>
             }

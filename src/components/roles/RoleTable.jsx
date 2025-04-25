@@ -24,7 +24,7 @@ const RoleTable = ({ roles, onEdit, onDelete }) => {
             >
               <td className="py-2 px-4 font-medium">{role.name}</td>
               <td className="py-2 px-4">{role.description}</td>
-              <td className="py-2 px-4 text-right">
+              <td className="py-2 px-4 flex justify-end">
                 <ActionButtons
                   onEdit={() => onEdit(role)}
                   onDelete={() => onDelete(role.id)}

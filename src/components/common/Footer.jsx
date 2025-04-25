@@ -15,7 +15,7 @@ export default function Footer() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="mt-16 bg-gradient-to-t from-indigo-800 to-yellow-600 text-white pt-12 pb-6"
+      className=" bg-gradient-to-t from-indigo-800 to-yellow-600 text-white pt-12 pb-6"
     >
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Sección Logo y Redes Sociales */}

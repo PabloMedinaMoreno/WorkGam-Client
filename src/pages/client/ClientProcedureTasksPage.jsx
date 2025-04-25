@@ -45,8 +45,8 @@ const ClientProcedureTasksPage = () => {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <LoadingSpinner />
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
       </div>
     );
   }

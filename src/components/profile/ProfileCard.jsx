@@ -67,7 +67,7 @@ const ProfileCard = ({
         <div className="flex justify-between border-b pb-2">
           <span className="font-medium">Empresa:</span>
           <span className="text-gray-500">
-            {user.company || "Medi Tech Solutions"}
+            {user.company || "WorkGam"}
           </span>
         </div>
       </div>

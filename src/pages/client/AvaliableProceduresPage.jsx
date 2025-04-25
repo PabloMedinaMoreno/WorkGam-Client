@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import IconButton from "../../components/common/IconButton.jsx";
+import { CircularProgress } from "@mui/material";
 
 const AvailableProceduresPage = () => {
   const navigate = useNavigate();
@@ -31,6 +32,14 @@ const AvailableProceduresPage = () => {
       toast.error(error.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">
@@ -58,7 +67,7 @@ const AvailableProceduresPage = () => {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <div>
-                <h2 className="text-xl font-semibold mb-2 text-indigo-800" >
+                <h2 className="text-xl font-semibold mb-2 text-indigo-800">
                   {proc.name}
                 </h2>
                 <p className="text-gray-600 mb-4">{proc.description}</p>

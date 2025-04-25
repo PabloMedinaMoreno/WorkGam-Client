@@ -94,7 +94,7 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is added or updated.
    * @throws {Error} If there is an error saving the task.
    */
-  addOrupdateTaskService: async (selectedTask, taskData, procedureId) => {
+  addOrUpdateTask: async (selectedTask, taskData, procedureId) => {
     try {
       if (selectedTask) {
         await updateTaskService(
@@ -124,7 +124,7 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is deleted.
    * @throws {Error} If there is an error deleting the task.
    */
-  deleteTaskService: async (taskId) => {
+  deleteTask: async (taskId) => {
     try {
       await deleteTaskService(taskId);
       set((state) => ({
@@ -289,7 +289,7 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is accepted.
    * @throws {Error} If there is an error accepting the task.
    */
-  acceptTaskService: async (taskId, socketId) => {
+  acceptTask: async (taskId, socketId) => {
     try {
       await acceptTaskService(taskId, socketId);
       set((state) => ({
@@ -316,7 +316,7 @@ const useTaskStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the task is rejected.
    * @throws {Error} If there is an error rejecting the task.
    */
-  rejectTaskService: async (taskId, reason, socketId) => {
+  rejectTask: async (taskId, reason, socketId) => {
     try {
       await rejectTaskService(taskId, reason, socketId);
       set((state) => ({

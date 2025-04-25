@@ -2,10 +2,18 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaTrash } from "react-icons/fa";
 import FileUploadButton from "../common/FileUploadButton";
+import { IconButton, Tooltip } from "@mui/material";
 
-const ClientProcedureTasksTable = ({ procedure, tasks, onFileSelect, onRemoveFile }) => {
-  if (!procedure) return <div className="p-8">No se encontraron datos del trámite.</div>;
-  if (tasks.length === 0) return <p>No hay tareas registradas para este trámite.</p>;
+const ClientProcedureTasksTable = ({
+  procedure,
+  tasks,
+  onFileSelect,
+  onRemoveFile,
+}) => {
+  if (!procedure)
+    return <div className="p-8">No se encontraron datos del trámite.</div>;
+  if (tasks.length === 0)
+    return <p>No hay tareas registradas para este trámite.</p>;
 
   return (
     <div className="overflow-x-auto bg-white rounded shadow">
@@ -39,17 +47,20 @@ const ClientProcedureTasksTable = ({ procedure, tasks, onFileSelect, onRemoveFil
                     >
                       {task.uploadedFile.name}
                     </a>
-                    <button
-                      onClick={() => onRemoveFile(task.id)}
-                      className="ml-4 text-red-600 hover:text-red-800 cursor-pointer"
-                      title="Eliminar archivo"
-                    >
-                      <FaTrash />
-                    </button>
+                    <Tooltip title={"Eliminar archivo"} arrow>
+                      <IconButton
+                        color="secondary"
+                        onClick={() => onRemoveFile(task.id)}
+                      >
+                        <FaTrash />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                 ) : (
                   <FileUploadButton
-                    onFileSelect={(file) => onFileSelect(task.id, file, task.name)}
+                    onFileSelect={(file) =>
+                      onFileSelect(task.id, file, task.name)
+                    }
                     label="Adjuntar PDF"
                   />
                 )}

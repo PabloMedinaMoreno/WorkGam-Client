@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactCanvasConfetti from "react-canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
@@ -27,6 +27,7 @@ const LevelUpAnimation = ({ level, onClose }) => {
   const { previousLevel, nextLevel } = level;
   const refAnimationInstance = useRef(null);
   const audioRef = useRef(null);
+  const [progress, setProgress] = useState(0);  // Track progress state
 
   const fireConfetti = () => {
     const shoot = (ratio, settings) =>
@@ -51,6 +52,19 @@ const LevelUpAnimation = ({ level, onClose }) => {
         console.warn("Autoplay bloqueado:", e);
       });
     }
+
+    // Progress simulation (0 to 100)
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      if (currentProgress >= 100) {
+        clearInterval(interval); // Stop once we reach 100%
+      } else {
+        currentProgress += 1;
+        setProgress(currentProgress); // Update the progress state
+      }
+    }, 25); // Speed of the progress animation (can be adjusted)
+
+    return () => clearInterval(interval);  // Clean up the interval on unmount
   }, []);
 
   const handleClose = () => {
@@ -73,7 +87,6 @@ const LevelUpAnimation = ({ level, onClose }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Contenedor exterior con el borde degradado */}
           <motion.div
             className="relative w-[90%] max-w-2xl rounded-3xl shadow-xl p-[3px] bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -81,7 +94,6 @@ const LevelUpAnimation = ({ level, onClose }) => {
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Contenedor interior con fondo sólido y mismo radio */}
             <div className="rounded-3xl p-10 text-white relative">
               <button
                 onClick={handleClose}
@@ -92,7 +104,7 @@ const LevelUpAnimation = ({ level, onClose }) => {
               </button>
 
               <h2 className="text-4xl font-extrabold text-center mb-8 tracking-wide drop-shadow-2xl animate-pulse">
-                🎉 ¡Nivel Ascendido! 🎉
+              🏆 ¡Nivel Ascendido! 🏆
               </h2>
 
               <motion.div
@@ -101,7 +113,6 @@ const LevelUpAnimation = ({ level, onClose }) => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
               >
-                {/* Nivel anterior */}
                 <div className="text-center">
                   <img
                     src={previousLevel.image}
@@ -112,10 +123,8 @@ const LevelUpAnimation = ({ level, onClose }) => {
                   <p className="text-sm text-white/70">XP: {previousLevel.xp}</p>
                 </div>
 
-                {/* Flecha */}
                 <div className="text-5xl text-white animate-bounce">→</div>
 
-                {/* Nuevo nivel */}
                 <div className="text-center">
                   <img
                     src={nextLevel.image}
@@ -130,7 +139,21 @@ const LevelUpAnimation = ({ level, onClose }) => {
               </motion.div>
 
               <p className="text-xl text-center font-semibold text-white mt-4">
-                🚀 ¡Ahora eres nivel <strong>{nextLevel.name}</strong>! 🚀
+              🔝 ¡Ahora eres nivel <strong>{nextLevel.name}</strong>! 🔝
+              </p>
+
+              {/* Barra de progreso con animación */}
+              <div className="w-full bg-gray-300 rounded-full h-2 mt-6">
+                <motion.div
+                  className="bg-yellow-400 h-full rounded-full"
+                  style={{
+                    width: `${progress}%`, 
+                    transition: "width 0.025s ease-out",
+                  }}
+                />
+              </div>
+              <p className="text-center text-white mt-4 font-semibold">
+                {progress}% alcanzado.
               </p>
             </div>
           </motion.div>

@@ -12,7 +12,7 @@ export default function HomePage() {
           <motion.img
             src="/images/workgam-logo.png" // Asegúrate de que la ruta sea correcta
             alt="WorkGam Logo"
-            className="w-32 h-auto mb-8 mx-auto" // Centrado horizontal con mx-auto
+            className="w-32 h-auto mt-8 mb-8 mx-auto" // Centrado horizontal con mx-auto
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -106,32 +106,33 @@ export default function HomePage() {
       </section>
 
       {/* Call-to-Action */}
-      <section className="py-20 bg-gradient-to-r from-indigo-700 to-yellow-500 text-white text-center">
-        <motion.h2
-          className="text-3xl font-bold mb-4"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          ¿Listo para transformar tu workflow?
-        </motion.h2>
-        <motion.p
-          className="text-lg mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
-          Únete a WorkGam hoy y lleva la gestión de trámites a otro nivel.
-        </motion.p>
-        <motion.a
-          href="/register"
-          className="inline-block rounded-full bg-white px-10 py-4 text-indigo-600 font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition"
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 200 }}
-        >
-          Comenzar Ahora
-        </motion.a>
-      </section>
+      <section className="py-20 bg-gradient-to-b from-indigo-800 to-yellow-600 text-white text-center">
+  <motion.h2
+    className="text-3xl font-bold mb-4"
+    initial={{ x: -50, opacity: 0 }}
+    animate={{ x: 0, opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
+    ¿Listo para transformar tu workflow?
+  </motion.h2>
+  <motion.p
+    className="text-lg mb-8"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.3, duration: 0.8 }}
+  >
+    Únete a WorkGam hoy y lleva la gestión de trámites a otro nivel.
+  </motion.p>
+  <motion.a
+    href="/register"
+    className="inline-block rounded-full bg-white px-10 py-4 text-indigo-600 font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition"
+    whileHover={{ scale: 1.05 }}
+    transition={{ type: "spring", stiffness: 200 }}
+  >
+    Comenzar Ahora
+  </motion.a>
+</section>
+
     </div>
   );
 }

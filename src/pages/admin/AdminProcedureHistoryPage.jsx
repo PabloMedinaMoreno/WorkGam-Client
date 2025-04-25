@@ -56,7 +56,11 @@ const AdminProcedureHistoryPage = () => {
       : allStartedProcedures.filter((proc) => proc.status === statusFilter);
 
   if (loading) {
-    <CircularProgress />;
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
   }
 
   return (

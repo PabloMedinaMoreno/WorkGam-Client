@@ -37,7 +37,7 @@ const TaskTable = ({ tasks, onEdit, onDelete }) => {
                 <td className="py-2 px-4">{task.xp}</td>
                 <td className="py-2 px-4">{task.difficulty}</td>
                 <td className="py-2 px-4">{task.estimated_duration_days} días</td>
-                <td className="py-2 px-4 text-right">
+                <td className="py-2 px-4 flex justify-end">
                   <ActionButtons
                     onEdit={() => onEdit(task)}
                     onDelete={() => onDelete(task.id)}

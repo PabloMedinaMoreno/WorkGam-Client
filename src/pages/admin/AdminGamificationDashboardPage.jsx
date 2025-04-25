@@ -8,8 +8,13 @@ import { toast } from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
 
 const AdminGamificationDashboardPage = () => {
-  const { ranking, levels, loadGamificationRanking, loadGamificationLevels, loading } =
-    useGamificationStore();
+  const {
+    ranking,
+    levels,
+    loadGamificationRanking,
+    loadGamificationLevels,
+    loading,
+  } = useGamificationStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,9 +39,12 @@ const AdminGamificationDashboardPage = () => {
   };
 
   if (loading) {
-    <CircularProgress />;
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
   }
-
   return (
     <div className="p-8">
       {/* Level Carousel */}
