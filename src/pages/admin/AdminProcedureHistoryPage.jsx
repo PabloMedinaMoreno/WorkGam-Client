@@ -71,11 +71,11 @@ const AdminProcedureHistoryPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Historial de Trámites Iniciados
+        Historial de trámites iniciados
       </motion.h1>
 
       {allStartedProcedures.length === 0 ? (
-        <p className="text-center">No hay trámites iniciados.</p>
+        <p className="text-center text-gray-600">No hay trámites iniciados.</p>
       ) : (
         <>
           <div className="mb-6">

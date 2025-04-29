@@ -23,11 +23,11 @@ const CompletedTasksPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Tareas Completadas
+        Tareas completadas
       </motion.h1>
 
       {completedTasks.length === 0 ? (
-        <p className="text-center">No tienes tareas completadas</p>
+        <p className="text-center text-gray-600">No tienes tareas completadas</p>
       ) : (
         <div className="max-h-[500px] overflow-y-auto pr-2 space-y-4">
           {completedTasks.map((task, index) => (

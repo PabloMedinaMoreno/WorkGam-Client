@@ -2,32 +2,28 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { FaSignOutAlt } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ options }) => {
   // Variantes de animación para el sidebar
   const sidebarVariants = {
     hidden: { x: "-100%", opacity: 0 },
-    visible: { 
-      x: 0, 
-      opacity: 1, 
-      transition: { 
-        duration: 0.5, 
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
         ease: "easeInOut", // Mejora el easing para una transición más suave
-      }
+      },
     },
-    exit: { 
-      x: "-100%", 
-      opacity: 0, 
-      transition: { 
-        duration: 0.5, 
-        ease: "easeInOut", 
-      } 
+    exit: {
+      x: "-100%",
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
     },
   };
-
-  const { logout } = useAuth();
 
   return (
     <motion.aside
@@ -58,17 +54,6 @@ const Sidebar = ({ options }) => {
           </NavLink>
         ))}
       </nav>
-
-      {/* <div className="mt-auto px-4 py-4">
-        <motion.button
-          onClick={logout}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-full flex items-center justify-center p-2 bg-yellow-400 text-white hover:bg-indigo-700 hover:text-yellow-500 rounded-lg transition cursor-pointer"
-        >
-          <FaSignOutAlt size={20} />
-        </motion.button>
-      </div> */}
     </motion.aside>
   );
 };

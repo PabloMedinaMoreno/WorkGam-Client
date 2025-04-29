@@ -13,7 +13,6 @@ const PendingTasksIcon = () => {
     <Badge
       badgeContent={count}
       color="secondary"
-      // Ajusta la posición del badge si lo deseas
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',

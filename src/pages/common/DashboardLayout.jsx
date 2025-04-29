@@ -38,7 +38,6 @@ import {
   FaFileAlt,
   FaCogs,
   FaFolderOpen,
-  FaTasks,
   FaCheckCircle,
   FaHistory,
 } from "react-icons/fa";
@@ -57,8 +56,8 @@ export default function DashboardLayout({ sidebarOpen }) {
 
   // Carga inicial de tareas para empleados
   useEffect(() => {
-    // Si el usuario no es cliente ni administrador, carga las tareas pendientes
-    if (user?.role && !["Cliente", "Administrador"].includes(user.role)) {
+    // Si el usuario es empleado
+    if (user?.role && employeeRoles.includes(user.role)) {
       useTaskStore.getState().loadMyPendingTasks();
     }
   }, [user]);

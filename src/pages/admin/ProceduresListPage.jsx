@@ -1,8 +1,6 @@
 // src/pages/admin/AdminProceduresPage.jsx
 import React, { useEffect, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
 import ProcedureTable from "../../components/procedures/ProcedureTable";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import ProcedureModal from "../../components/procedures/ProcedureModal";
 import toast from "react-hot-toast";
 import useProcedureStore from "../../store/useProcedureStore";
@@ -80,7 +78,7 @@ const ProceduresListPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Gestión de Trámites
+        Gestión de trámites
       </motion.h1>
 
       <motion.div

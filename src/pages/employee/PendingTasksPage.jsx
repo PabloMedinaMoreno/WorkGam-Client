@@ -59,11 +59,11 @@ const PendingTasksPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Tareas Pendientes
+        Tareas pendientes
       </motion.h1>
 
       {pendingTasks.length === 0 ? (
-        <p className="text-center">No tienes tareas pendientes</p>
+        <p className="text-center text-gray-600">No tienes tareas pendientes</p>
       ) : (
         <div className="overflow-x-auto overflow-y-auto pr-2 space-y-4 max-h-[600px]">
           {pendingTasks.map((task, index) => (
@@ -88,13 +88,13 @@ const PendingTasksPage = () => {
 
               {task.document_uploaded && (
                 <a
-                  href={task.document_uploaded}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-600 underline mt-2 block"
-                >
-                  Ver documento
-                </a>
+                href={t.document_uploaded}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-indigo-700 hover:underline"
+              >
+                Ver documento
+              </a>
               )}
 
               <div className="mt-4 flex gap-2">

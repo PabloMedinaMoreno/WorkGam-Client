@@ -104,9 +104,9 @@ export const changePasswordSchema = z
 
 /**
  * Schema for forgot password request.
- * 
+ *
  * Validates the email format for password recovery.
- * 
+ *
  * @constant {import("zod").ZodSchema<{ email: string }>}
  */
 export const forgotPasswordSchema = z.object({
@@ -115,9 +115,9 @@ export const forgotPasswordSchema = z.object({
 
 /**
  * Schema for resetting the password.
- * 
+ *
  * Validates the new password format for password reset.
- * 
+ *
  * @constant {import("zod").ZodSchema<{ password: string }>}
  */
 export const resetPasswordSchema = z.object({

@@ -2,12 +2,12 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import useProcedureStore from "../../store/useProcedureStore";
 import { useAuth } from "../../context/AuthContext";
-import { FaEdit, FaTimes } from "react-icons/fa";
 import IconButton from "../../components/common/IconButton";
 import { motion } from "framer-motion";
+import { CircularProgress } from "@mui/material";
+import { FaEdit, FaTimes, FaFileAlt } from "react-icons/fa";
 
 const MyProceduresPage = () => {
   const {
@@ -19,14 +19,12 @@ const MyProceduresPage = () => {
   const navigate = useNavigate();
   const { socket } = useAuth();
 
-  // Cargar los trámites iniciados por el cliente
   useEffect(() => {
     loadMyStartedProcedures().catch((error) => {
       toast.error(error.message);
     });
   }, [loadMyStartedProcedures]);
 
-  // Función para asignar estilos según el estado del trámite
   const getStatusStyles = (status) => {
     switch (status) {
       case "pending":
@@ -66,11 +64,11 @@ const MyProceduresPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Mis Trámites Iniciados
+        Mis trámites iniciados
       </motion.h1>
 
       {myStartedProcedures.length === 0 ? (
-        <p className="text-center">No has iniciado ningún trámite todavía.</p>
+        <p className="text-center text-gray-600">No has iniciado ningún trámite todavía.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {myStartedProcedures.map((startedProcedure, index) => (
@@ -114,7 +112,7 @@ const MyProceduresPage = () => {
               </div>
 
               <div className="flex flex-col gap-2 mt-4">
-                {startedProcedure.status !== "completed" && (
+                {startedProcedure.status !== "completed" ? (
                   <>
                     <IconButton
                       variant="primary"
@@ -145,6 +143,27 @@ const MyProceduresPage = () => {
                       <FaTimes />
                     </IconButton>
                   </>
+                ) : (
+                  <IconButton
+                    variant="primary"
+                    label="Consultar Documentación"
+                    onClick={() =>
+                      navigate(
+                        `/dashboard/client/procedures/${startedProcedure.id}/tasks`,
+                        {
+                          state: {
+                            procedure: {
+                              id: startedProcedure.procedure_id,
+                              name: startedProcedure.name,
+                              description: startedProcedure.description,
+                            },
+                          },
+                        }
+                      )
+                    }
+                  >
+                    <FaFileAlt />
+                  </IconButton>
                 )}
               </div>
             </motion.div>

@@ -13,7 +13,8 @@ export const createProcedureSchema = z.object({
     message: "El título del trámite es obligatorio y no puede quedar vacío.",
   }),
   description: z.string().min(1, {
-    message: "La descripción del trámite es obligatoria y no puede quedar vacía.",
+    message:
+      "La descripción del trámite es obligatoria y no puede quedar vacía.",
   }),
 });
 
@@ -30,6 +31,7 @@ export const updateProcedureSchema = z.object({
     message: "El título del trámite es obligatorio y no puede quedar vacío.",
   }),
   description: z.string().min(1, {
-    message: "La descripción del trámite es obligatoria y no puede quedar vacía.",
+    message:
+      "La descripción del trámite es obligatoria y no puede quedar vacía.",
   }),
 });

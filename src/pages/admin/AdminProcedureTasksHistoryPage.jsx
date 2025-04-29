@@ -66,13 +66,13 @@ const AdminProcedureTasksHistoryPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Tareas Iniciadas del Trámite
+        Tareas iniciadas del trámite
       </motion.h1>
 
       {loading ? (
         <CircularProgress />
       ) : allStartedTasks.length === 0 ? (
-        <p>No hay tareas para este trámite.</p>
+        <p className="text-gray-600">No hay tareas para este trámite.</p>
       ) : (
         <>
           <div className="mb-6">

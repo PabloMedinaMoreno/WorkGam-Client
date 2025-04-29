@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { UserCheck, Shield, Smartphone, Award } from "lucide-react";
+import { UserCheck, Smartphone, Award } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -61,19 +61,14 @@ export default function HomePage() {
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
           >
-            Características Destacadas
+            Características destacadas
           </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 icon: <Smartphone className="h-10 w-10 text-yellow-500" />,  
                 title: "Accesibilidad",
                 desc: "Gestiona trámites desde cualquier dispositivo, en cualquier lugar y momento.",
-              },
-              {
-                icon: <Shield className="h-10 w-10 text-yellow-500" />,  
-                title: "Seguridad",
-                desc: "Protección con JWT, Zod y AWS S3 para mantener la confidencialidad de tus datos.",
               },
               {
                 icon: <UserCheck className="h-10 w-10 text-yellow-500" />,  
@@ -129,7 +124,7 @@ export default function HomePage() {
     whileHover={{ scale: 1.05 }}
     transition={{ type: "spring", stiffness: 200 }}
   >
-    Comenzar Ahora
+    Comenzar ahora
   </motion.a>
 </section>
 

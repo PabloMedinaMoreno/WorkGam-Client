@@ -29,8 +29,6 @@ const AdminProcedureTasksPage = () => {
     });
   }, [loadTasks, procedure.id]);
 
-  console.log("Tasks:", tasks);
-
   const [open, setOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 

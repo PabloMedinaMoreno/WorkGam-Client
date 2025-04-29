@@ -7,7 +7,6 @@ import { loginSchema } from "../../schemas/authSchema.js";
 import Card from "../../components/common/Card";
 import Label from "../../components/common/Label";
 import Input from "../../components/common/Input";
-import Button from "../../components/common/Button";
 import IconButton from "../../components/common/IconButton"; // Importando IconButton
 import { FaEye, FaEyeSlash, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
@@ -79,13 +78,13 @@ function LoginPage() {
           <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800"> 
 
           {/* bg-gradient-to-r from-indigo-700 to-yellow-600 text-transparent bg-clip-text */}
-            Inicio de Sesión
+            Inicio de sesión
           </h1>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Correo Electrónico */}
             <div>
-              <Label htmlFor="email">Correo Electrónico</Label>
+              <Label htmlFor="email">Correo electrónico</Label>
               <Input
                 id="email"
                 type="email"

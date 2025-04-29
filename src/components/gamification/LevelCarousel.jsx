@@ -46,7 +46,7 @@ const LevelCarousel = ({ levels }) => {
         transition={{ duration: 0.8 }}
         className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
       >
-        Niveles de Gamificación
+        Niveles de gamificación
       </motion.h1>
       <motion.div
         className="overflow-hidden mb-10"
@@ -68,18 +68,18 @@ const LevelCarousel = ({ levels }) => {
               variants={itemVariants}
             >
               <div className="w-20 h-20 mb-4 rounded-full overflow-hidden border-2 border-white shadow-md">
-  <img
-    src={level.image}
-    alt={level.name}
-    className="w-full h-full object-cover"
-  />
-</div>
+                <img
+                  src={level.image}
+                  alt={level.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold mb-2">{level.name}</h3>
               <p className="text-sm text-gray-600 text-center">
                 {level.description}
               </p>
               <p className="text-center mt-2 font-semibold">
-                Pts: {level.pointsRequired}
+                XP: {level.pointsRequired}
               </p>
             </motion.div>
           ))}

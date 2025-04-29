@@ -84,9 +84,7 @@ export const NotificationsProvider = ({ children }) => {
       if (!notifications.find((n) => n.id === notificationId)?.is_read) {
         setUnreadCount((prev) => prev - 1);
       }
-      setNotifications((prev) =>
-        prev.filter((n) => n.id !== notificationId)
-      );
+      setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     } catch (error) {
       throw error;
     }
@@ -100,20 +98,23 @@ export const NotificationsProvider = ({ children }) => {
     } catch (error) {
       throw error;
     }
-  }
+  };
+
+  const handleNewNotification = (notification) => {
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  };
 
   const handleLevelUp = (levelData) => {
     setNewLevel(levelData);
-    console.log("Level Up Notification:", levelData);
-  };
-
-  const clearLevelUp = () => {
-    setNewLevel(null);
   };
 
   const handleProgressNotification = (progressData) => {
     setNewProgress(progressData);
-    console.log("Progress Notification:", progressData);
+  };
+
+  const clearLevelUp = () => {
+    setNewLevel(null);
   };
 
   const clearProgressNotification = () => {
@@ -122,12 +123,8 @@ export const NotificationsProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && socket) {
-      socket.on("new_notification", (notification) => {
-        setNotifications((prev) => [notification, ...prev]);
-        setUnreadCount((prev) => prev + 1);
-      });
+      socket.on("new_notification", handleNewNotification);
       socket.on("level_up_notification", handleLevelUp);
-
       socket.on("progress_notification", handleProgressNotification);
 
       return () => {

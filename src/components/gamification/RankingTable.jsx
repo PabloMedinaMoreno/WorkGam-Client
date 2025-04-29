@@ -4,7 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 
 const RankingTable = ({ ranking, onRowClick }) => {
   const { user } = useAuth();
-  const userId = user?.id || null;
   const getRowStyles = (index, isCurrentUser) => {
     if (isCurrentUser) return "bg-yellow-100 border-l-4 border-yellow-500";
     if (index === 0) return "bg-yellow-300 font-semibold";
@@ -48,7 +47,7 @@ const RankingTable = ({ ranking, onRowClick }) => {
 
           <tbody>
             {ranking.map((employee, index) => {
-              const isCurrentUser = userId === employee.id;
+              const isCurrentUser = user.id === employee.id;
               return (
                 <motion.tr
                   key={employee.id}

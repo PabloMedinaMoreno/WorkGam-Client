@@ -8,7 +8,14 @@ const NotificationIcon = () => {
   const { unreadCount } = useNotifications();
 
   return (
-    <Badge badgeContent={unreadCount} color="secondary">
+    <Badge
+      badgeContent={unreadCount}
+      color="secondary"
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+    >
       <FaBell />
     </Badge>
   );

@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState, useRef, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
-export default function NavBar({ sidebarOpen, onToggleSidebar }) {
+const Navbar = ({ sidebarOpen, onToggleSidebar }) => {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,29 +17,29 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
         setDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
     logout();
     setDropdownOpen(false);
-    navigate('/');
+    navigate("/");
   };
 
   const navLinks = isAuthenticated
-    ? [{ to: '/dashboard', label: 'Dashboard' }]
+    ? [{ to: "/dashboard", label: "Dashboard" }]
     : [
-        { to: '/', label: 'Inicio' },
-        { to: '/login', label: 'Iniciar sesión' },
-        { to: '/register', label: 'Registrarse' }
+        { to: "/", label: "Inicio" },
+        { to: "/login", label: "Iniciar sesión" },
+        { to: "/register", label: "Registrarse" },
       ];
 
   return (
     <motion.header
       initial={{ y: -80 }}
       animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 120, damping: 15 }}
+      transition={{ type: "spring", stiffness: 120, damping: 15 }}
       className="fixed top-0 inset-x-0 z-50 bg-gradient-to-r from-indigo-700 to-yellow-600 text-white shadow-xl backdrop-blur-lg"
     >
       <div className="w-full flex h-16 items-center justify-between px-4 md:px-6">
@@ -54,7 +54,7 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
               {sidebarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </motion.button>
           )}
-          <NavLink to={'/'} className="flex items-center ml-2">
+          <NavLink to={"/"} className="flex items-center ml-2">
             <motion.img
               src="/images/workgam-logo.png"
               alt="WorkGam"
@@ -67,7 +67,9 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-            >WorkGam</motion.span>
+            >
+              WorkGam
+            </motion.span>
           </NavLink>
         </div>
 
@@ -80,10 +82,12 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
                   <>
                     <motion.span
                       className="py-2 text-lg font-medium"
-                      initial={{ color: '#ffffff' }}
-                      animate={{ color: isActive ? '#fbbf24' : '#ffffff' }}
+                      initial={{ color: "#ffffff" }}
+                      animate={{ color: isActive ? "#fbbf24" : "#ffffff" }}
                       transition={{ duration: 0.3 }}
-                    >{label}</motion.span>
+                    >
+                      {label}
+                    </motion.span>
                     {!isAuthenticated && isActive && (
                       <motion.div
                         layoutId="underline"
@@ -104,7 +108,7 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
           >
             {isAuthenticated ? (
               <img
-                src={user?.profile_pic || '/images/default-profile.png'}
+                src={user?.profile_pic || "/images/default-profile.png"}
                 alt="Perfil"
                 className="h-10 w-10 rounded-full border-2 border-white shadow-lg cursor-pointer"
               />
@@ -113,7 +117,7 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
                 src="/images/default-profile.png"
                 alt="Invitado"
                 className="h-10 w-10 rounded-full border-2 border-white shadow-lg cursor-pointer"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate("/login")}
               />
             )}
 
@@ -127,22 +131,31 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
                   className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden"
                 >
                   <motion.button
-                    onClick={() => { navigate('/dashboard/profile'); setDropdownOpen(false); }}
+                    onClick={() => {
+                      navigate("/dashboard/profile");
+                      setDropdownOpen(false);
+                    }}
                     whileHover={{ scale: 1.02 }}
                     className="flex w-full items-center gap-2 px-4 py-3 hover:bg-gray-100 cursor-pointer"
-                  ><FaUser />Perfil</motion.button>
+                  >
+                    <FaUser />
+                    Perfil
+                  </motion.button>
                   <motion.button
                     onClick={handleLogout}
                     whileHover={{ scale: 1.02 }}
                     className="flex w-full items-center gap-2 px-4 py-3 hover:bg-gray-100 text-red-600 cursor-pointer"
-                  ><FaSignOutAlt />Cerrar sesión</motion.button>
+                  >
+                    <FaSignOutAlt />
+                    Cerrar sesión
+                  </motion.button>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
           <motion.button
-            onClick={() => setMobileMenuOpen(o => !o)}
+            onClick={() => setMobileMenuOpen((o) => !o)}
             className="md:hidden p-2 hover:bg-indigo-600 rounded-md ml-4"
           >
             {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
@@ -155,7 +168,7 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
         {mobileMenuOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden bg-indigo-600 text-white overflow-hidden"
           >
@@ -171,7 +184,10 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
                     <>
                       <span className="block py-2">{label}</span>
                       {!isAuthenticated && isActive && (
-                        <motion.div className="h-1 w-full bg-yellow-400 rounded" layoutId="underline" />
+                        <motion.div
+                          className="h-1 w-full bg-yellow-400 rounded"
+                          layoutId="underline"
+                        />
                       )}
                     </>
                   )}
@@ -179,10 +195,15 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
               ))}
               {!isAuthenticated && (
                 <motion.button
-                  onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
+                  onClick={() => {
+                    navigate("/register");
+                    setMobileMenuOpen(false);
+                  }}
                   whileHover={{ scale: 1.05 }}
                   className="mt-4 flex w-full justify-center rounded-full bg-yellow-400 text-indigo-700 px-4 py-2 font-semibold mx-auto"
-                >Registrarse</motion.button>
+                >
+                  Registrarse
+                </motion.button>
               )}
             </div>
           </motion.div>
@@ -190,4 +211,6 @@ export default function NavBar({ sidebarOpen, onToggleSidebar }) {
       </AnimatePresence>
     </motion.header>
   );
-}
+};
+
+export default Navbar;

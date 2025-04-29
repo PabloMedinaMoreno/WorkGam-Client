@@ -109,7 +109,6 @@ export const uploadTaskDocumentService = async (
   startedProcedureId,
   taskId,
   file,
-  socketId
 ) => {
   try {
     const formData = new FormData();
@@ -121,6 +120,7 @@ export const uploadTaskDocumentService = async (
     );
     return response.data;
   } catch (error) {
+    console.log(error);
     throw new Error(
       error.response?.data?.message || "Error al subir el documento de la tarea"
     );
@@ -141,7 +141,7 @@ export const uploadTaskDocumentService = async (
 export const fetchAllStartedTasksService = async (startedProcedureId) => {
   try {
     const response = await axiosInstance.get(
-      `/procedures/started/${startedProcedureId}/tasks`
+      `/procedures/all-started/${startedProcedureId}/tasks`
     );
     return response.data;
   } catch (error) {
@@ -232,6 +232,37 @@ export const rejectTaskService = async (taskId, reason, socketId) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Error al rechazar la tarea"
+    );
+  }
+};
+
+
+export const fetchClientStartedTasksService = async (startedProcedureId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/procedures/started/${startedProcedureId}/tasks`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "Error al obtener las tareas iniciadas del cliente"
+    );
+  }
+}
+
+export const fetchClientPendingTasksService = async (startedProcedureId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/procedures/started/${startedProcedureId}/tasks/pending`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "Error al obtener las tareas pendientes del cliente"
     );
   }
 };

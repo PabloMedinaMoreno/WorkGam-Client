@@ -7,7 +7,6 @@ import { forgotPasswordService } from "../../services/authService";
 import Card from "../../components/common/Card";
 import Label from "../../components/common/Label";
 import Input from "../../components/common/Input";
-import Button from "../../components/common/Button";
 import IconButton from "../../components/common/IconButton";
 import { FaPaperPlane } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
@@ -66,11 +65,11 @@ function ForgotPasswordPage() {
 
         <Card className="w-full p-8 shadow-lg rounded-lg bg-white relative">
           <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
-            Recuperar Contraseña
+            Recuperar contraseña
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Label htmlFor="email">Correo Electrónico</Label>
+              <Label htmlFor="email">Correo electrónico</Label>
               <Input
                 id="email"
                 type="email"

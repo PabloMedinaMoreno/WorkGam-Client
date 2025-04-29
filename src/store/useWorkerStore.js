@@ -68,7 +68,7 @@ const useWorkerStore = create((set, get) => ({
    * @returns {Promise<void>} A promise that resolves when the worker has been added or updated.
    * @throws {Error} If there is an error adding or updating the worker.
    */
-  addOrupdateWorker: async (workerData, selectedWorker) => {
+  addOrUpdateWorker: async (workerData, selectedWorker) => {
     try {
       if (selectedWorker) {
         await updateWorkerService(selectedWorker.id, workerData);

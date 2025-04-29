@@ -12,7 +12,10 @@ export const workerSchema = z.object({
     .string()
     .min(1, { message: "El nombre de usuario es obligatorio" }),
   email: z.string().email({ message: "El correo electrónico debe ser válido" }),
-  password: z.string().min(5, "La contraseña debe tener al menos 5 caracteres").optional(),
+  password: z
+    .string()
+    .min(5, "La contraseña debe tener al menos 5 caracteres")
+    .optional(),
   role_id: z.number().min(1, { message: "El rol es obligatorio" }),
   gender: z.enum(["male", "female"], {
     message: "El género debe ser 'male' o 'female'",

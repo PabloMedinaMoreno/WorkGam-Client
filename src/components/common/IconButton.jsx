@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 
 const variantStyles = {
-  primary: "bg-gradient-to-r from-indigo-700 to-yellow-600 text-white",
+  // primary: "bg-gradient-to-r from-indigo-700 to-yellow-600 text-white",
   primary: "bg-indigo-700 hover:bg-yellow-500 text-white",
   success: "bg-green-600 hover:bg-yellow-500 text-white",
   danger: "bg-red-600 hover:bg-yellow-500 text-white",

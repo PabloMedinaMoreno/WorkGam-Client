@@ -79,7 +79,7 @@ function RegisterPage() {
             </div>
 
             <div>
-              <Label htmlFor="email">Correo Electrónico</Label>
+              <Label htmlFor="email">Correo electrónico</Label>
               <Input id="email" type="email" placeholder="tuemail@dominio.com" {...register("email")} className="mt-1" />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>

@@ -22,7 +22,7 @@ const RejectTaskModal = ({ task, onConfirm, onCancel }) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
         >
-          <h2 className="text-xl font-bold mb-4">Motivo de Rechazo</h2>
+          <h2 className="text-xl font-bold mb-4">Motivo de rechazo</h2>
           <textarea
             value={reason}
             onChange={(e) => setReason(e.target.value)}

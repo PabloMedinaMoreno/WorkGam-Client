@@ -64,11 +64,11 @@ function ResetPasswordPage() {
 
         <Card className="w-full p-8 shadow-lg rounded-lg bg-white relative">
           <h1 className="text-3xl font-semibold text-center mb-6 text-indigo-800">
-            Restablecer Contraseña
+            Restablecer contraseña
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Label htmlFor="password">Nueva Contraseña</Label>
+              <Label htmlFor="password">Nueva contraseña</Label>
               <Input
                 id="password"
                 type="password"
@@ -88,7 +88,7 @@ function ResetPasswordPage() {
               disabled={loading}
             >
               <FaLock className="mr-2" />
-              {loading ? "Restableciendo..." : "Restablecer Contraseña"}
+              {loading ? "Restableciendo..." : "Restablecer contraseña"}
             </IconButton>
           </form>
         </Card>

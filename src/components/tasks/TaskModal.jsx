@@ -52,7 +52,10 @@ const TaskModal = ({ open, onClose, onSubmit, selectedTask }) => {
       setValue("name", selectedTask.name);
       setValue("description", selectedTask.description);
       setValue("xp", parseInt(selectedTask.xp, 10));
-      setValue("estimated_duration_days", parseInt(selectedTask.estimated_duration_days, 10));
+      setValue(
+        "estimated_duration_days",
+        parseInt(selectedTask.estimated_duration_days, 10)
+      );
       setValue("difficulty", selectedTask.difficulty);
       setValue("role_id", selectedTask.role_id);
     }
@@ -64,16 +67,11 @@ const TaskModal = ({ open, onClose, onSubmit, selectedTask }) => {
    * @param {Object} data - The validated form data containing task information.
    */
   const handleFormSubmit = (data) => {
-    // Ensure the values are parsed to integers
     data.xp = parseInt(data.xp, 10);
     data.estimated_duration_days = parseInt(data.estimated_duration_days, 10);
-  
-    // Submit the form with parsed data
     onSubmit({ ...selectedTask, ...data });
     onClose();
   };
-  
-  
 
   return (
     <AnimatePresence>

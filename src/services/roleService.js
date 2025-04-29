@@ -83,7 +83,5 @@ export const deleteRoleService = async (roleId) => {
     throw new Error(
       error.response?.data?.message || "Error al eliminar el rol"
     ); 
-  } finally {
-    console.log("Role deleted successfully");
   }
 };

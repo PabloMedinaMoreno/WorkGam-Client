@@ -1,46 +1,49 @@
+// src/pages/ClientProcedureTasksPage.jsx
 import React, { useEffect } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import ClientProcedureTasksTable from "../../components/tasks/ClientProcedureTasksTable";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useTaskStore from "../../store/useTaskStore";
-import { motion } from "framer-motion";
+import { CircularProgress } from "@mui/material";
+import ClientStartedTasksTable from "../../components/tasks/ClientStartedTasksTable";
+import ClientPendingTasksTable from "../../components/tasks/ClientPendingTasksTable";
+import IconButton from "../../components/common/IconButton";
 import { FaCheckCircle } from "react-icons/fa";
 
 const ClientProcedureTasksPage = () => {
-  const location = useLocation();
-  const { procedure } = location.state || {};
   const { id: startedProcedureId } = useParams();
   const navigate = useNavigate();
 
   const {
-    tasks,
-    loadTasks,
+    clientStartedTasks,
+    clientPendingTasks,
     loading,
+    loadClientStartedTasks,
+    loadClientPendingTasks,
     handleFileSelect,
+    handleRemoveFile,
     handleConfirmUploads,
-    pendingUploads,
-    setTaskFile,
   } = useTaskStore();
 
   useEffect(() => {
-    if (!procedure) {
-      toast.error("No se encontró el trámite");
-      return;
-    }
+    const fetchTasks = async () => {
+      try {
+        await loadClientStartedTasks(startedProcedureId);
+        await loadClientPendingTasks(startedProcedureId);
+      } catch {
+        toast.error("Error al cargar las tareas del trámite.");
+        navigate(-1);
+      }
+    };
+    fetchTasks();
+  }, [
+    loadClientStartedTasks,
+    loadClientPendingTasks,
+    startedProcedureId,
+    navigate,
+  ]);
 
-    loadTasks(procedure.id).catch((error) => {
-      toast.error(error.message);
-    });
-  }, [loadTasks, procedure]);
-
-  const handleRemoveFile = (taskId) => {
-    setTaskFile(taskId, null); // custom action to remove file from task
-  };
-
-  const handleConfirm = async () => {
+  const onClick = async () => {
     await handleConfirmUploads(startedProcedureId);
-    navigate("/dashboard/client/procedures");
   };
 
   if (loading) {
@@ -53,44 +56,24 @@ const ClientProcedureTasksPage = () => {
 
   return (
     <div className="p-8">
-      <motion.h1
-        className="text-2xl sm:text-3xl font-semibold text-center mb-6 text-indigo-800"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        {procedure?.name || "Trámite"}
-      </motion.h1>
+      <ClientStartedTasksTable tasks={clientStartedTasks} />
 
-      <motion.p
-        className="text-gray-600 mb-8 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-      >
-        {procedure?.description || "Descripción no disponible."}
-      </motion.p>
-
-      <ClientProcedureTasksTable
-        procedure={procedure}
-        tasks={tasks}
-        onFileSelect={handleFileSelect}
-        onRemoveFile={handleRemoveFile}
+      <ClientPendingTasksTable
+        tasks={clientPendingTasks}
+        handleFileSelect={handleFileSelect}
+        handleRemoveFile={handleRemoveFile}
       />
 
-      <motion.div
-        className="mt-6 flex justify-end"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        <button
-          onClick={handleConfirm}
-          className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-md flex items-center gap-2 transition cursor-pointer"
+      <div className="mt-6 flex justify-end">
+        <IconButton
+          variant="success"
+          label="Confirmar Subidas"
+          onClick={onClick}
+          className="px-6 py-3"
         >
-          <FaCheckCircle className="text-lg" />
-          Confirmar Subidas
-        </button>
-      </motion.div>
+          <FaCheckCircle />
+        </IconButton>
+      </div>
     </div>
   );
 };

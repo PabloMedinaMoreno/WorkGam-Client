@@ -10,6 +10,8 @@ import {
   fetchMyCompletedTasksService,
   fetchMyPendingTasksService,
   acceptTaskService,
+  fetchClientPendingTasksService,
+  fetchClientStartedTasksService,
   rejectTaskService,
 } from "../services/taskService";
 
@@ -54,6 +56,8 @@ const useTaskStore = create((set, get) => ({
   pendingTasks: [],
   loading: false,
   pendingUploads: {},
+  clientStartedTasks : [],
+  clientPendingTasks : [],
 
   /**
    * Loads the tasks for a specific procedure.
@@ -135,6 +139,30 @@ const useTaskStore = create((set, get) => ({
     }
   },
 
+  loadClientStartedTasks: async (startedProcedureId) => {
+    set({ loading: true });
+    try {
+      const clientStartedTasks = await fetchClientStartedTasksService(startedProcedureId);
+      set({ clientStartedTasks });
+    } catch (error) {
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  loadClientPendingTasks: async (startedProcedureId) => {
+    set({ loading: true });
+    try {
+      const clientPendingTasks = await fetchClientPendingTasksService(startedProcedureId);
+      set({ clientPendingTasks });
+    } catch (error) {
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   /**
    * Handles the file selection for a task.
    *
@@ -147,26 +175,32 @@ const useTaskStore = create((set, get) => ({
    * @param {string} taskName - The name of the task for which the file is selected.
    */
   handleFileSelect: (taskId, file, taskName) => {
-    const { setTaskFile } = get();
-    setTaskFile(taskId, file);
-    toast.success(`Archivo seleccionado para la tarea ${taskName}`);
+    get().setTaskFile(taskId, file);
+    toast.success(`Archivo seleccionado para la tarea "${taskName}"`);
   },
 
   setTaskFile: (taskId, file) => {
     set((state) => {
-      const updatedTasks = state.tasks.map((task) =>
-        task.id === taskId ? { ...task, uploadedFile: file } : task
+      const updatedPending = state.clientPendingTasks.map((t) =>
+        t.id === taskId ? { ...t, uploadedFile: file } : t
       );
-  
-      const updatedPendingUploads = file
-        ? { ...state.pendingUploads, [taskId]: file }
-        : Object.fromEntries(
-            Object.entries(state.pendingUploads).filter(([key]) => +key !== +taskId)
-          );
-  
+      const updatedUploads = { ...state.pendingUploads, [taskId]: file };
       return {
-        tasks: updatedTasks,
-        pendingUploads: updatedPendingUploads,
+        clientPendingTasks: updatedPending,
+        pendingUploads: updatedUploads,
+      };
+    });
+  },
+
+  handleRemoveFile: (taskId) => {
+    set((state) => {
+      const updatedPending = state.clientPendingTasks.map((t) =>
+        t.id === taskId ? { ...t, uploadedFile: undefined } : t
+      );
+      const { [taskId]: _removed, ...restUploads } = state.pendingUploads;
+      return {
+        clientPendingTasks: updatedPending,
+        pendingUploads: restUploads,
       };
     });
   },
@@ -196,16 +230,17 @@ const useTaskStore = create((set, get) => ({
       try {
         await uploadTaskDocumentService(startedProcedureId, taskId, file);
       } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Error uploading file";
-        toast.error(errorMessage);
+        toast.error(error.message);
         errorOccurred = true;
       }
     }
     set({ pendingUploads: {} });
+
     if (!errorOccurred) {
       toast.success("Subidas confirmadas");
     }
+    await get().loadClientPendingTasks(startedProcedureId);
+    await get().loadClientStartedTasks(startedProcedureId);
   },
 
   /**

@@ -10,6 +10,8 @@ import {
   cancelStartedProcedureProcedure,
 } from "../services/procedureService";
 
+
+
 /**
  * Zustand store for managing procedures-related state.
  *
@@ -40,7 +42,7 @@ import {
  *
  * @returns {ProcedureStore} The Zustand store for procedures.
  */
-const useProcedureStore = create((set) => ({
+const useProcedureStore = create((set, get) => ({
   procedures: [],
   myStartedProcedures: [],
   allStartedProcedures: [],

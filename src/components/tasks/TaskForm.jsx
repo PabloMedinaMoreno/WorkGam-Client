@@ -40,7 +40,7 @@ const TaskForm = ({ register, errors, watch, roles }) => {
       <TextField
         {...register("xp", {
           required: "XP es obligatorio",
-          valueAsNumber: true, // Ensure the value is treated as a number
+          valueAsNumber: true, 
         })}
         label="XP"
         fullWidth
@@ -52,7 +52,7 @@ const TaskForm = ({ register, errors, watch, roles }) => {
       <TextField
         {...register("estimated_duration_days", {
           required: "La duración es obligatoria",
-          valueAsNumber: true, // Ensure the value is treated as a number
+          valueAsNumber: true,
         })}
         label="Duración estimada (días)"
         fullWidth
@@ -72,7 +72,7 @@ const TaskForm = ({ register, errors, watch, roles }) => {
         helperText={errors.difficulty?.message}
       >
         <MenuItem value="easy">Fácil</MenuItem>
-        <MenuItem value="medium">Medio</MenuItem>
+        <MenuItem value="medium">Media</MenuItem>
         <MenuItem value="hard">Difícil</MenuItem>
       </TextField>
     </>

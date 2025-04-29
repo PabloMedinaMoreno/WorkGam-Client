@@ -67,8 +67,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
-  console.log(user);
-
   const signup = async (userData) => {
     try {
       const user = await signupService(userData);
@@ -125,7 +123,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
-      console.log("Checking login status...");
       setLoading(true);
       try {
         const user = await profileService();
@@ -133,7 +130,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(false);
           setUser(null);
           setLoading(false);
-          console.log("User not authenticated");
           return;
         }
         setUser(user);
@@ -155,13 +151,6 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true,
       });
 
-      socketInstance.on("connect", () => {
-        console.log(`Socket connected: ${socketInstance.id}`);
-        socketInstance.emit("join", user.id); // User joins a specific room
-      });
-      socketInstance.on("disconnect", () => {
-        console.log("Socket disconnected");
-      });
       setSocket(socketInstance);
 
       return () => {

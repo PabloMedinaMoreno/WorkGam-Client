@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../components/common/LoadingSpinner.jsx";
 import useProcedureStore from "../../store/useProcedureStore.js";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
@@ -49,11 +48,11 @@ const AvailableProceduresPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Trámites Disponibles
+        Trámites disponibles
       </motion.h1>
 
       {procedures.length === 0 ? (
-        <p className="text-center">
+        <p className="text-center text-gray-600">
           No hay trámites disponibles en este momento.
         </p>
       ) : (
@@ -67,7 +66,7 @@ const AvailableProceduresPage = () => {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <div>
-                <h2 className="text-xl font-semibold mb-2 text-indigo-800">
+                <h2 className="text-xl font-semibold mb-2">
                   {proc.name}
                 </h2>
                 <p className="text-gray-600 mb-4">{proc.description}</p>

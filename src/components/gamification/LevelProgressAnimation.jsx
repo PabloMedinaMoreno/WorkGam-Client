@@ -104,9 +104,9 @@ const LevelProgressAnimation = ({ progress, onClose }) => {
             </div>
 
             <p className="text-center text-white mt-4 font-semibold">
-              🚀 Estás a{" "}
-              <strong>{progress.nextLevel.xp - progress.currentXP}</strong> XP de
-              alcanzar <strong>{progress.nextLevel.name}</strong> 🌟
+              🌟 Estás a{" "}
+              <strong>{progress.nextLevel.xp - progress.currentXP}</strong> XP
+              de alcanzar <strong>{progress.nextLevel.name}</strong> 🌟
             </p>
           </div>
         </motion.div>
