@@ -4,7 +4,7 @@ import { FaBars, FaTimes, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 
-const Navbar = ({ sidebarOpen, onToggleSidebar }) => {
+const NavigationBar = ({ sidebarOpen, onToggleSidebar }) => {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -213,4 +213,4 @@ const Navbar = ({ sidebarOpen, onToggleSidebar }) => {
   );
 };
 
-export default Navbar;
+export default NavigationBar;
