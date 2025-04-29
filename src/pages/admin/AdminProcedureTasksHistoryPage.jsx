@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import useTaskStore from "../../store/useTaskStore";

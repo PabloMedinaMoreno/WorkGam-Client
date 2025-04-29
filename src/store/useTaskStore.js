@@ -258,7 +258,6 @@ const useTaskStore = create((set, get) => ({
     set({ loading: true });
     try {
       const allStartedTasks = await fetchAllStartedTasksService(startedProcedureId);
-      console.log("All started tasks:", allStartedTasks);
       set({ allStartedTasks });
     } catch (error) {
       throw error;

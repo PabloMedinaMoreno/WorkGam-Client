@@ -57,7 +57,6 @@ export default function DashboardLayout({ sidebarOpen }) {
   // Carga inicial de tareas para empleados
   useEffect(() => {
     // Si el usuario es empleado
-    console.log("user", user);
     if (!loading && user?.role && employeeRoles.includes(user.role) && user.role !== "Administrador") {
       useTaskStore.getState().loadMyPendingTasks();
     }

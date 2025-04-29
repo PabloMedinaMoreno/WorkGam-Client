@@ -71,6 +71,7 @@ export const AuthProvider = ({ children }) => {
    // Initialize auth from stored token
    useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("Token from localStorage:", token);
     if (token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setIsAuthenticated(true);
@@ -84,6 +85,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { user: u, token } = await signupService(data);
       localStorage.setItem("token", token);
+      console.log("Token from signup:", token);
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(u);
       setIsAuthenticated(true);
@@ -98,6 +100,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { user: u, token } = await loginService(creds);
       localStorage.setItem("token", token);
+      console.log("Token from login:", token);
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(u);
       setIsAuthenticated(true);
@@ -109,6 +112,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await logoutService();
     localStorage.removeItem("token");
+    console.log("Token removed from localStorage");
     delete API.defaults.headers.common["Authorization"];
     setUser(null);
     setIsAuthenticated(false);

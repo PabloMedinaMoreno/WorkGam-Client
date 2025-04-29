@@ -10,7 +10,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
     return <LoadingSpinner />;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" />;
   }
 
