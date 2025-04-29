@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import API from "../services/axios.js";             
 import {
   signupService,
   loginService,
@@ -67,25 +68,39 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
-  const signup = async (userData) => {
-    try {
-      const user = await signupService(userData);
-      setUser(user);
+   // Initialize auth from stored token
+   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setIsAuthenticated(true);
-    } catch (error) {
-      throw error;
+    }
+    setLoading(false);
+  }, []);
+
+  /** @param {Object} data */
+  const signup = async (data) => {
+    setLoading(true);
+    try {
+      const { user: u, token } = await signupService(data);
+      localStorage.setItem("token", token);
+      API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setUser(u);
+      setIsAuthenticated(true);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (userData) => {
+  /** @param {{ email: string, password: string }} creds */
+  const login = async (creds) => {
+    setLoading(true);
     try {
-      const user = await loginService(userData);
-      setUser(user);
+      const { user: u, token } = await loginService(creds);
+      localStorage.setItem("token", token);
+      API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setUser(u);
       setIsAuthenticated(true);
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -93,57 +108,56 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await logoutService();
+    localStorage.removeItem("token");
+    delete API.defaults.headers.common["Authorization"];
     setUser(null);
     setIsAuthenticated(false);
     setLoading(false);
-    if (socket) socket.disconnect(); // Disconnect WebSocket when logging out
+    if (socket) {
+      socket.disconnect();
+      setSocket(null);
+    }
   };
 
+  /** @param {Object} profileData */
   const updateProfile = async (profileData) => {
+    setLoading(true);
     try {
-      const user = await updateProfileService(profileData);
-      setUser(user);
-    } catch (error) {
-      throw error;
+      const u = await updateProfileService(profileData);
+      setUser(u);
     } finally {
       setLoading(false);
     }
   };
 
+  /** @param {File} file */
   const updateProfilePic = async (file) => {
+    setLoading(true);
     try {
-      const user = await updateProfilePicService(file);
-      setUser(user);
-    } catch (error) {
-      throw error;
+      const u = await updateProfilePicService(file);
+      setUser(u);
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch current profile after login state
   useEffect(() => {
-    const checkLogin = async () => {
+    const loadProfile = async () => {
       setLoading(true);
       try {
-        const user = await profileService();
-        if (!user) {
-          setIsAuthenticated(false);
-          setUser(null);
-          setLoading(false);
-          return;
-        }
-        setUser(user);
+        const u = await profileService();
+        setUser(u);
         setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
+      } catch {
         setUser(null);
-        console.error("Error checking login status:", error);
+        setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
     };
-    checkLogin();
-  }, []);
+    if (isAuthenticated) loadProfile();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) {

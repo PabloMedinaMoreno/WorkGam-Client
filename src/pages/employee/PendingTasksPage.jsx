@@ -7,7 +7,7 @@ import CountdownTimer from "../../components/common/CountdownTimer";
 import RejectTaskModal from "../../components/tasks/RejectTaskModal";
 import { useAuth } from "../../context/AuthContext";
 import IconButton from "../../components/common/IconButton";
-import { FaAccessibleIcon, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 /**
  * Página de Tareas Pendientes donde se gestionan las tareas que el usuario aún no ha completado.
@@ -88,7 +88,7 @@ const PendingTasksPage = () => {
 
               {task.document_uploaded && (
                 <a
-                href={t.document_uploaded}
+                href={task.document_uploaded}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-indigo-700 hover:underline"

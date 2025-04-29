@@ -47,7 +47,6 @@ const useRoleStore = create((set, get) => ({
    */
   loadRoles: async () => {
     set({ loading: true });
-    console.log("Loading roles...");
     try {
       const roles = await fetchRolesService();
       set({ roles, employeeRoles: roles.map((role) => role.name) });

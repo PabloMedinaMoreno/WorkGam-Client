@@ -60,7 +60,7 @@ export const markNotificationAsReadService = async (notificationId) => {
  */
 export const markAllNotificationsAsReadService = async () => {
   try {
-    const response = await axiosInstance.put("/notifications/read/all");
+    const response = await axiosInstance.put("/notifications/read");
     return response.data;
   } catch (error) {
     throw new Error(

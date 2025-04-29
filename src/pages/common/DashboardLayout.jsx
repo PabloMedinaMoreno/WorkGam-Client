@@ -49,7 +49,7 @@ import LevelUpAnimation from "../../components/gamification/LevelUpAnimation";
 import LevelProgressAnimation from "../../components/gamification/LevelProgressAnimation";
 
 export default function DashboardLayout({ sidebarOpen }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { employeeRoles } = useRoleStore();
   const { newLevel, newProgress, clearLevelUp, clearProgressNotification } =
     useNotifications();
@@ -57,7 +57,8 @@ export default function DashboardLayout({ sidebarOpen }) {
   // Carga inicial de tareas para empleados
   useEffect(() => {
     // Si el usuario es empleado
-    if (user?.role && employeeRoles.includes(user.role)) {
+    console.log("user", user);
+    if (!loading && user?.role && employeeRoles.includes(user.role) && user.role !== "Administrador") {
       useTaskStore.getState().loadMyPendingTasks();
     }
   }, [user]);

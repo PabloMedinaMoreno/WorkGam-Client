@@ -1,28 +1,16 @@
-// src/components/gamification/WorkerGamificationModal.jsx
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import { motion } from "framer-motion";
-import useGamificationStore from "../../store/useGamificationStore";
 import { FaTimes } from "react-icons/fa";
+import useGamificationStore from "../../store/useGamificationStore";
 
-const WorkerGamificationModal = ({ open, onClose, worker }) => {
-  const [workerStats, setWorkerStats] = useState(null);
-  const { getEmployeeGamificationStats } = useGamificationStore();
-
-  useEffect(() => {
-    if (worker?.id) {
-      getEmployeeGamificationStats(worker.id)
-        .then((data) => setWorkerStats(data))
-        .catch((error) => console.error("Error fetching worker stats:", error));
-    }
-  }, [worker?.id, getEmployeeGamificationStats]);
-
-  const loading = !worker || !workerStats;
+const WorkerGamificationModal = ({ open, onClose, worker, stats }) => {
+  const loading = !worker || !stats;
 
   let content = <p className="text-center">Cargando datos...</p>;
 
   if (!loading) {
-    const { user, completedTasks, pendingTasks, progressData } = workerStats;
+    const { user, completedTasks, pendingTasks, progressData } = stats;
     const { username, profile_pic } = user;
     const { currentLevel, nextLevel, currentXP } = progressData;
     const nextLevelXP = nextLevel?.xp || 1000;

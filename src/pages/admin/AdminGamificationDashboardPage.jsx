@@ -1,4 +1,3 @@
-// src/pages/gamification/AdminGamificationDashboardPage.jsx
 import React, { useEffect, useState } from "react";
 import RankingTable from "../../components/gamification/RankingTable";
 import LevelCarousel from "../../components/gamification/LevelCarousel";
@@ -13,11 +12,16 @@ const AdminGamificationDashboardPage = () => {
     levels,
     loadGamificationRanking,
     loadGamificationLevels,
+    getEmployeeGamificationStats,
     loading,
   } = useGamificationStore();
 
+  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [workerStats, setWorkerStats] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
         await Promise.all([
           loadGamificationRanking(),
@@ -26,16 +30,29 @@ const AdminGamificationDashboardPage = () => {
       } catch (error) {
         toast.error(error.message);
       }
-    };
-    fetchData();
+    })();
   }, [loadGamificationRanking, loadGamificationLevels]);
 
-  const [selectedWorker, setSelectedWorker] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleRowClick = (worker) => {
+  const handleRowClick = async (worker) => {
     setSelectedWorker(worker);
     setModalOpen(true);
+    try {
+      console.log("Fetching stats for worker:", worker.id);
+      const stats = await getEmployeeGamificationStats(worker.id);
+      console.log("Fetched stats:", stats);
+      setWorkerStats(stats);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      toast.error("Could not load worker stats");
+      // optionally close modal on failure:
+      // setModalOpen(false);
+    }
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setSelectedWorker(null);
+    setWorkerStats(null);
   };
 
   if (loading) {
@@ -45,19 +62,17 @@ const AdminGamificationDashboardPage = () => {
       </div>
     );
   }
+
   return (
     <div className="p-8">
-      {/* Level Carousel */}
       <LevelCarousel levels={levels} />
-
-      {/* Ranking */}
       <RankingTable ranking={ranking} onRowClick={handleRowClick} />
 
-      {/* Worker Gamification Modal */}
       <WorkerGamificationModal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={handleClose}
         worker={selectedWorker}
+        stats={workerStats}
       />
     </div>
   );

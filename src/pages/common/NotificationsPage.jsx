@@ -3,6 +3,7 @@ import { useNotifications } from "../../context/NotificationsContext";
 import { motion } from "framer-motion";
 import IconButton from "../../components/common/IconButton";
 import { FaEye, FaCheckDouble, FaTrash, FaTrashAlt } from "react-icons/fa"; // Importando los íconos para eliminar
+import { CircularProgress } from "@mui/material";
 
 const NotificationsPage = () => {
   const {

@@ -46,6 +46,9 @@ const ClientProcedureTasksPage = () => {
     await handleConfirmUploads(startedProcedureId);
   };
 
+  // Determine if there's at least one pending task with an uploaded file
+  const hasUploads = clientPendingTasks.some((t) => t.uploadedFile);
+
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -64,16 +67,18 @@ const ClientProcedureTasksPage = () => {
         handleRemoveFile={handleRemoveFile}
       />
 
-      <div className="mt-6 flex justify-end">
-        <IconButton
-          variant="success"
-          label="Confirmar Subidas"
-          onClick={onClick}
-          className="px-6 py-3"
-        >
-          <FaCheckCircle />
-        </IconButton>
-      </div>
+      {hasUploads && (
+        <div className="mt-6 flex justify-end">
+          <IconButton
+            variant="success"
+            label="Confirmar Subidas"
+            onClick={onClick}
+            className="px-6 py-3"
+          >
+            <FaCheckCircle />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };
