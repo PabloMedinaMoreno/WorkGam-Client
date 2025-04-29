@@ -134,7 +134,7 @@ export default function DashboardLayout({ sidebarOpen }) {
     },
   ];
 
-  const options = menuOptions[user.role] || employeeOptions;
+  const options = menuOptions[user?.role] || employeeOptions;
 
   return (
     <div className="flex">
