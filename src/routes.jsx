@@ -7,15 +7,14 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   const { user, isAuthenticated, loading } = useAuth();
 
   if (loading) {
+    console.log("Loading");
     return <LoadingSpinner />;
   }
-
-  if (!isAuthenticated || !user) {
+  if (!isAuthenticated) {
+    console.log("User not authenticated, redirecting to login...");
     return <Navigate to="/login" />;
   }
-
   if (
-    children.props.path &&
     allowedRoles &&
     !allowedRoles.includes(user.role)
   ) {

@@ -50,6 +50,7 @@ function LoginPage() {
   // Redirige al dashboard si el usuario está autenticado
   useEffect(() => {
     if (isAuthenticated) {
+      console.log("Usuario autenticado, redirigiendo al dashboard...");
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);

@@ -195,20 +195,3 @@ export const resetPasswordService = async (token, password) => {
     );
   }
 };
-
-/**
- * Logs out the authenticated user.
- *
- * Sends a POST request to the `/auth/logout` endpoint to log out the user.
- *
- * @async
- * @function
- * @returns {Promise<void>} A promise that resolves when the logout request is successful.
- */
-export const logoutService = async () => {
-  try {
-    await axiosInstance.post("/auth/logout");
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Error al cerrar sesión");
-  }
-};

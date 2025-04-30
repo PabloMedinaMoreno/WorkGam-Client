@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 // Layout
@@ -29,7 +29,10 @@ const App = () => {
       <Toaster />
 
       {/* Navigation Bar siempre visible */}
-      <NavigationBar sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} />
+      <NavigationBar
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={toggleSidebar}
+      />
 
       {/* Contenido principal con padding-top para no solapar NavBar */}
       <main className="pt-16 min-h-[calc(100vh-4rem)]">
