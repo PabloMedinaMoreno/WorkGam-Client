@@ -5,7 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import useTaskStore from "../../store/useTaskStore";
 import useRoleStore from "../../store/useRoleStore";
-import ProtectedRoute from "../../routes";
+import ProtectedRoute from "../../routes"
 
 import Sidebar from "../../components/common/Sidebar";
 import DashboardHome from "./DashboardHome";
@@ -54,13 +54,12 @@ export default function DashboardLayout({ sidebarOpen }) {
   const { newLevel, newProgress, clearLevelUp, clearProgressNotification } =
     useNotifications();
 
-  // Carga inicial de tareas para empleados
-  useEffect(() => {
-    // Si el usuario es empleado
-    if (!loading && user?.role && employeeRoles.includes(user.role) && user.role !== "Administrador") {
-      useTaskStore.getState().loadMyPendingTasks();
-    }
-  }, [user]);
+    useEffect(() => {
+      if (!loading && user?.role && employeeRoles.includes(user.role) && user.role !== "Administrador") {
+        useTaskStore.getState().loadMyPendingTasks();
+      }
+    }, [user, loading]);
+
 
   // Roles comunes para todos los usuarios
   const commonRoles = [...employeeRoles, "Cliente", "Administrador"];

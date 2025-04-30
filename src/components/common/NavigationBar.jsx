@@ -193,18 +193,6 @@ const NavigationBar = ({ sidebarOpen, onToggleSidebar }) => {
                   )}
                 </NavLink>
               ))}
-              {!isAuthenticated && (
-                <motion.button
-                  onClick={() => {
-                    navigate("/register");
-                    setMobileMenuOpen(false);
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  className="mt-4 flex w-full justify-center rounded-full bg-yellow-400 text-indigo-700 px-4 py-2 font-semibold mx-auto"
-                >
-                  Registrarse
-                </motion.button>
-              )}
             </div>
           </motion.div>
         )}

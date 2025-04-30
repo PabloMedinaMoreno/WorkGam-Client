@@ -8,6 +8,7 @@ import {
   updateProfileService,
   updateProfilePicService,
 } from "../services/authService.js";
+import useRoleStore from "../store/useRoleStore.js";
 
 const AuthContext = createContext();
 
@@ -23,6 +24,8 @@ export const AuthProvider = ({ children }) => {
   // 1) Inicializamos loading a true para que al montar haya spinner:
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
+
+  const { loadRoles } = useRoleStore();
 
   useEffect(() => {
     const checkToken = async () => {
@@ -40,6 +43,7 @@ export const AuthProvider = ({ children }) => {
         const u = await profileService();
         setUser(u);
         setIsAuthenticated(true);
+        await loadRoles();
       } catch (error) {
         // token inválido o expirado → borrarlo y forzar login
         localStorage.removeItem("token");
@@ -75,6 +79,7 @@ export const AuthProvider = ({ children }) => {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(u);
       setIsAuthenticated(true);
+      await loadRoles();
     } finally {
       setLoading(false);
     }
