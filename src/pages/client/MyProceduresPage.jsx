@@ -1,5 +1,4 @@
-// src/pages/client/MyProceduresPage.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useProcedureStore from "../../store/useProcedureStore";
@@ -18,6 +17,7 @@ const MyProceduresPage = () => {
   } = useProcedureStore();
   const navigate = useNavigate();
   const { socket } = useAuth();
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     loadMyStartedProcedures().catch((error) => {
@@ -38,6 +38,19 @@ const MyProceduresPage = () => {
     }
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "pending":
+        return "Pendiente";
+      case "in_progress":
+        return "En Progreso";
+      case "completed":
+        return "Completado";
+      default:
+        return "Desconocido";
+    }
+  };
+
   const handleCancel = async (procedureId) => {
     try {
       await cancelProcedure(procedureId, socket.id);
@@ -47,6 +60,11 @@ const MyProceduresPage = () => {
       toast.error(error.message);
     }
   };
+
+  const filteredProcedures =
+    statusFilter === "all"
+      ? myStartedProcedures
+      : myStartedProcedures.filter((proc) => proc.status === statusFilter);
 
   if (loading) {
     return (
@@ -67,47 +85,72 @@ const MyProceduresPage = () => {
         Mis trámites iniciados
       </motion.h1>
 
-      {myStartedProcedures.length === 0 ? (
-        <p className="text-center text-gray-600">No has iniciado ningún trámite todavía.</p>
+      {/* Filtro de estado responsive */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6">
+        <label className="font-medium">Filtrar por estado:</label>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="w-full sm:w-auto border rounded px-3 py-1"
+        >
+          <option value="all">Todos</option>
+          <option value="pending" className="bg-yellow-100 text-yellow-800">
+            Pendiente
+          </option>
+          <option value="in_progress" className="bg-blue-100 text-blue-800">
+            En Progreso
+          </option>
+          <option value="completed" className="bg-green-100 text-green-800">
+            Completado
+          </option>
+        </select>
+      </div>
+
+      {filteredProcedures.length === 0 ? (
+        <p className="text-center text-gray-600">
+          {statusFilter === "all"
+            ? "No has iniciado ningún trámite todavía."
+            : "No hay trámites con ese estado."}
+        </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {myStartedProcedures.map((startedProcedure, index) => (
+          {filteredProcedures.map((startedProcedure, index) => (
             <motion.div
               key={startedProcedure.id}
-              className="border border-gray-200 rounded-lg p-6 shadow bg-white flex flex-col justify-between"
+              className="h-full border border-gray-200 rounded-lg p-6 shadow bg-white flex flex-col justify-between"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <div>
+              <div className="flex-1 flex flex-col">
                 <h2 className="text-xl font-semibold mb-2">
                   {startedProcedure.name}
                 </h2>
-                <p className="text-gray-600 mb-2">
+                <p className="text-gray-600 mb-2 flex-1">
                   {startedProcedure.description}
                 </p>
 
-                <p className="text-sm text-gray-500 mb-1">
-                  Inicio:{" "}
-                  {new Date(startedProcedure.start_date).toLocaleString()}
-                </p>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">
+                    Inicio:{" "}
+                    {new Date(startedProcedure.start_date).toLocaleString()}
+                  </p>
 
-                {startedProcedure.status === "completed" &&
-                  startedProcedure.end_date && (
-                    <p className="text-sm text-gray-500 mb-1">
-                      Finalización:{" "}
-                      {new Date(startedProcedure.end_date).toLocaleString()}
-                    </p>
-                  )}
+                  {startedProcedure.status === "completed" &&
+                    startedProcedure.end_date && (
+                      <p className="text-sm text-gray-500 mb-1">
+                        Finalización:{" "}
+                        {new Date(startedProcedure.end_date).toLocaleString()}
+                      </p>
+                    )}
+                </div>
 
                 <span
-                  className={`inline-block px-3 py-1 text-sm font-semibold border rounded-full mt-2 ${getStatusStyles(
+                  className={`inline-block px-3 py-1 text-sm font-semibold border rounded-full mt-2 self-start ${getStatusStyles(
                     startedProcedure.status
                   )}`}
                 >
-                  {startedProcedure.status === "pending" && "Pendiente"}
-                  {startedProcedure.status === "in_progress" && "En Progreso"}
-                  {startedProcedure.status === "completed" && "Completado"}
+                  {getStatusLabel(startedProcedure.status)}
                 </span>
               </div>
 

@@ -46,7 +46,7 @@ const ClientStartedTasksTable = ({ tasks }) => {
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
                 className="border-b hover:bg-gray-100"
               >
-                <td className="py-2 px-4 font-medium">{t.name}</td>
+                <td className="py-2 px-4 font-medium">{t.task_name}</td>
                 <td className="py-2 px-4">
                   {new Date(t.start_date).toLocaleDateString()}
                 </td>

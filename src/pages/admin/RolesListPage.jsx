@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import RoleTable from "../../components/roles/RoleTable";
 import RoleModal from "../../components/roles/RoleModal";
-import LoadingSpinner from "../../components/common/LoadingSpinner.jsx";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FaPlus } from "react-icons/fa";

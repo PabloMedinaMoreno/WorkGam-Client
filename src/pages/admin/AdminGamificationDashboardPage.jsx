@@ -37,15 +37,12 @@ const AdminGamificationDashboardPage = () => {
     setSelectedWorker(worker);
     setModalOpen(true);
     try {
-      console.log("Fetching stats for worker:", worker.id);
       const stats = await getEmployeeGamificationStats(worker.id);
-      console.log("Fetched stats:", stats);
       setWorkerStats(stats);
     } catch (error) {
       console.error("Error fetching stats:", error);
       toast.error("Could not load worker stats");
-      // optionally close modal on failure:
-      // setModalOpen(false);
+      setModalOpen(false);
     }
   };
 
