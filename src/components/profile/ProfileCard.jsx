@@ -26,7 +26,7 @@ const ProfileCard = ({
       <div className="flex justify-center relative">
         <Tooltip title="Cambiar imagen de perfil" arrow>
           <img
-            src={user.profile_pic || "images/default-profile.png"}
+            src={user.profile_pic || "https://tse1.mm.bing.net/th?id=OIP.ul21MarTuYknn6vFmQxOywHaHa&pid=Api&P=0&h=180" }
             alt="Profile"
             className="w-40 h-40 rounded-full border-4 border-gray-300 shadow-lg object-cover cursor-pointer"
             onClick={handleImageClick}
