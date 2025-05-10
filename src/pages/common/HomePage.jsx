@@ -127,7 +127,7 @@ export default function HomePage() {
                 title: "Básico",
                 price: "€13.95 / mes",
                 features: [
-                  "Historial completo de trámites",
+                  "Historial completo del workflow",
                   "Soporte limitado",
                   "Gestión avanzada de tareas",
                 ],
