@@ -1,5 +1,5 @@
 // src/components/common/CountdownTimer.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Componente para mostrar un temporizador con cuenta regresiva.

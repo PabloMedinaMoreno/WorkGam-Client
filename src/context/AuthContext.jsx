@@ -21,7 +21,6 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // 1) Inicializamos loading a true para que al montar haya spinner:
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const checkToken = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        // no hay token, dejamos loading = false y no autenticado
+        // 1) Si no hay token, no hay nada que hacer. Forzamos el estado de loading a false
         setIsAuthenticated(false);
         setUser(null);
         setLoading(false);

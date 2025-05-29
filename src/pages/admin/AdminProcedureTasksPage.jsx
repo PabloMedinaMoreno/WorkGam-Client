@@ -49,7 +49,7 @@ const AdminProcedureTasksPage = () => {
 
   const handleAddOrUpdateTask = async (taskData) => {
     try {
-      await addOrUpdateTask(selectedTask, taskData);
+      await addOrUpdateTask(selectedTask, taskData, procedure.id);
       toast.success("Tarea guardada");
     } catch (error) {
       toast.error(error.message);
